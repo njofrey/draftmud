@@ -22,8 +22,8 @@ export function ScrollView({
           opacity: 1,
           transition: {
             delay: delay,
-            staggerChildren: stagger ? 0.09 : 0,
-            duration: 0.5,
+            staggerChildren: stagger ? 0.06 : 0,
+            duration: 0.3,
           },
         },
       }}

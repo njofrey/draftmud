@@ -37,9 +37,9 @@ export type TextEffectProps = {
 };
 
 const defaultStaggerTimes: Record<PerType, number> = {
-  char: 0.03,
-  word: 0.05,
-  line: 0.1,
+  char: 0.02,
+  word: 0.03,
+  line: 0.06,
 };
 
 const defaultContainerVariants: Variants = {
@@ -47,11 +47,11 @@ const defaultContainerVariants: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.05,
+      staggerChildren: 0.03,
     },
   },
   exit: {
-    transition: { staggerChildren: 0.05, staggerDirection: -1 },
+    transition: { staggerChildren: 0.03, staggerDirection: -1 },
   },
 };
 

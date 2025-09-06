@@ -29,7 +29,7 @@ export type AnimatedGroupProps = {
 const defaultContainerVariants: Variants = {
   visible: {
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.06,
     },
   },
 };
