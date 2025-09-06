@@ -1,5 +1,5 @@
 'use client';
-import { ReactNode, useRef } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 import {
   motion,
   useInView,
@@ -33,6 +33,14 @@ export function InView({
 }: InViewProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, viewOptions);
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  // Solo animar una vez cuando entra en viewport por primera vez
+  const shouldAnimate = isInView && !hasAnimated;
+  
+  if (isInView && !hasAnimated) {
+    setHasAnimated(true);
+  }
 
   const MotionComponent = motion[as as keyof typeof motion] as typeof as;
 
@@ -40,7 +48,7 @@ export function InView({
     <MotionComponent
       ref={ref}
       initial='hidden'
-      animate={isInView ? 'visible' : 'hidden'}
+      animate={shouldAnimate ? 'visible' : hasAnimated ? 'visible' : 'hidden'}
       variants={variants}
       transition={transition}
     >
