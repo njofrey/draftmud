@@ -11,6 +11,11 @@ export const HeroHeader = () => {
   const [menuState, setMenuState] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
 
+  // Función para cerrar menú al hacer click en un link
+  const handleLinkClick = () => {
+    setMenuState(false);
+  };
+
   React.useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -75,6 +80,7 @@ export const HeroHeader = () => {
                     <li key={index}>
                       <Link
                         href={item.href}
+                        onClick={handleLinkClick}
                         className="text-muted-foreground hover:text-accent-foreground block duration-150"
                       >
                         <span>{item.name}</span>
@@ -99,7 +105,7 @@ export const HeroHeader = () => {
                   size="sm"
                   className={cn(isScrolled && "lg:hidden")}
                 >
-                  <Link href="#contact">
+                  <Link href="#contact" onClick={handleLinkClick}>
                     <span>Contacto</span>
                   </Link>
                 </Button>
@@ -108,7 +114,7 @@ export const HeroHeader = () => {
                   size="sm"
                   className={cn(isScrolled ? "lg:inline-flex" : "hidden")}
                 >
-                  <Link href="#contact">
+                  <Link href="#contact" onClick={handleLinkClick}>
                     <span>Contacto</span>
                   </Link>
                 </Button>
