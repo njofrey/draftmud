@@ -15,11 +15,11 @@ export default function FeaturesSection() {
         <div className="grid items-center gap-12 md:grid-cols-2 md:gap-12 lg:grid-cols-5 lg:gap-24">
           <div className="lg:col-span-2">
             <div className="md:pr-6 lg:pr-0">
-              <h2 className="text-4xl font-semibold lg:text-5xl">
+              <h2 className="text-4xl font-semibold lg:text-5xl text-center md:text-left">
                 Hablemos de tu proyecto
               </h2>
             </div>
-            <ul className="mt-8 divide-y border-y *:flex *:items-center *:gap-3 *:py-3">
+            <ul className="mt-8 space-y-4 *:flex *:items-center *:gap-3 *:py-3 *:justify-center md:*:justify-start *:border-b *:border-gray-200 dark:*:border-gray-700 *:pb-3 *:max-w-xs *:mx-auto md:*:mx-0">
               <li>
                 <Link href="#link" className="hover:text-accent-foreground">
                   <Mail className="size-5 mr-2 inline" />
@@ -59,12 +59,14 @@ export default function FeaturesSection() {
                     }
                     const nextUrl = `${window.location.origin}/gracias?${params.toString()}`;
                     const hiddenInput = e.currentTarget.querySelector('input[name="_next"]') as HTMLInputElement;
+
                     if (hiddenInput) {
                       hiddenInput.value = nextUrl;
                     }
                   }}
                 >
                   <input type="hidden" name="_next" value={`${typeof window !== 'undefined' ? window.location.origin : ''}/gracias`} />
+
                   <div>
                     <Label htmlFor="name">Nombre</Label>
                     <Input 

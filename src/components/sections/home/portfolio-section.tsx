@@ -12,7 +12,7 @@ export default function PortfolioSection() {
     >
       <div className="mx-auto max-w-5xl space-y-12 px-6">
         <div className="relative z-10 grid items-center gap-4 md:grid-cols-2 md:gap-12">
-          <h2 className="text-4xl font-semibold">
+          <h2 className="text-4xl font-semibold text-center md:text-left">
             Proyectos destacados
           </h2>
           <InView
@@ -26,9 +26,8 @@ export default function PortfolioSection() {
             }}
             viewOptions={{ margin: "0px 0px -100px 0px" }}
           >
-            <p className="max-w-sm sm:ml-auto">
-              Proyectos que han transformado negocios y generado resultados medibles
-              para nuestros clientes en diferentes industrias.
+            <p className="max-w-sm mx-auto text-center md:mx-0 md:text-left md:ml-auto">
+              Proyectos que han transformado negocios y generado resultados medibles para nuestros clientes en diferentes industrias.
             </p>
           </InView>
         </div>
