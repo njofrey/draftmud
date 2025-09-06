@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import "./stripe-animation.css";
 
-export default function GraciasPage() {
+function GraciasContent() {
   const searchParams = useSearchParams();
   const name = searchParams.get('name');
   const success = searchParams.get('success');
@@ -45,5 +46,20 @@ export default function GraciasPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function GraciasPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4">⏳</div>
+          <p className="text-muted-foreground">Cargando...</p>
+        </div>
+      </div>
+    }>
+      <GraciasContent />
+    </Suspense>
   );
 }
