@@ -8,6 +8,8 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-roboto: var(--font-roboto);
+  --font-faktum: 'Faktum', sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -112,11 +114,64 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+@font-face {
+  font-family: 'Faktum';
+  src: url('/Fonts/Faktum-Font/Faktum-Regular.woff2') format('woff2'),
+       url('/Fonts/Faktum-Font/Faktum-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Faktum';
+  src: url('/Fonts/Faktum-Font/Faktum-Bold.woff2') format('woff2'),
+       url('/Fonts/Faktum-Font/Faktum-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* Faktum Bold para títulos */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Faktum', sans-serif;
+    font-weight: 700;
+  }
+  
+  /* Roboto para body text */
+  p, span, div, a, button {
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  /* Estilos para la lista de features */
+  .features-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .features-list li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 18px;
+    line-height: 1.2;
+    font-family: 'Faktum', sans-serif;
+    font-weight: 400;
+    color: hsl(var(--foreground));
+    margin-bottom: 8px;
+  }
+  
+  .features-list li svg {
+    flex-shrink: 0;
+    color: hsl(var(--primary));
   }
 }

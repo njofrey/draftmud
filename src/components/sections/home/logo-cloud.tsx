@@ -7,7 +7,7 @@ export default function LogoCloud() {
         <div className="flex flex-col items-center md:flex-row">
           <div className="md:max-w-44 md:border-r md:pr-6">
             <p className="text-end text-sm hidden xl:block">
-              Trabajamos con las plataformas de última tecnología
+              Trabajamos con:
             </p>
           </div>
           <div className="relative py-6 md:w-[calc(100%-11rem)]">

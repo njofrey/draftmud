@@ -1,38 +1,42 @@
 export const PORTFOLIO_CONTENT = [
   {
-    name: "TechStart Chile",
+    name: "Mudi Matcha",
     description:
-      "Rediseño completo de plataforma SaaS que aumentó las conversiones en 280% y redujo el bounce rate en 45%.",
-    img: "/images/portfolio/eco.jpg",
+      "Tienda online de matcha japonés con identidad de marca minimalista y enfoque en productos premium.",
+    img: "/images/portfolio/web-mudi.jpg",
     url: "#",
-    result: "+280% conversiones",
-    industry: "SaaS"
+    result: "+200% ventas",
+    industry: "Alimentación",
+    services: ["Diseño UI/UX", "E-commerce", "Branding", "SEO"]
   },
   {
-    name: "EcoSolutions",
+    name: "Nine9 Brands",
     description:
-      "Landing page para empresa de energía renovable que generó $2.5M en leads calificados en 6 meses.",
-    img: "/images/portfolio/event.jpg",
+      "Marketplace multi-marca con arquitectura escalable y sistema de gestión unificado para múltiples tiendas.",
+    img: "/images/portfolio/web-nine.jpg",
     url: "#",
-    result: "$2.5M en leads",
-    industry: "Energía"
+    result: "+300% escalabilidad",
+    industry: "Marketplace",
+    services: ["Arquitectura", "Multi-tienda", "Integraciones", "Analytics"]
   },
   {
-    name: "InnovateLab",
+    name: "Aguamarina",
     description:
-      "Identidad de marca y sitio web para startup de biotecnología que captó $5M en inversión Serie A.",
-    img: "/images/portfolio/art.jpg",
+      "E-commerce de joyería premium con diseño elegante y experiencia de usuario optimizada para conversiones.",
+    img: "/images/portfolio/web-aguamarina.jpg",
     url: "#",
-    result: "$5M inversión",
-    industry: "Biotecnología"
+    result: "+150% conversiones",
+    industry: "Joyería",
+    services: ["UX Design", "Conversión", "Fotografía", "CRO"]
   },
   {
-    name: "DigitalPro",
+    name: "BeeClean",
     description:
-      "E-commerce B2B que aumentó las ventas online en 340% y redujo el costo de adquisición en 60%.",
-    img: "/images/portfolio/bike.jpg",
+      "Plataforma e-commerce para productos ecológicos con diseño sustentable y navegación intuitiva.",
+    img: "/images/portfolio/web-bee.jpg",
     url: "#",
-    result: "+340% ventas",
-    industry: "E-commerce"
+    result: "+180% engagement",
+    industry: "Ecológico",
+    services: ["Sustentable", "Mobile-first", "Email Marketing", "Social"]
   }
 ];
