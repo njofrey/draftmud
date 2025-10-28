@@ -10,32 +10,38 @@ import Link from "next/link";
 
 export default function FeaturesSection() {
   return (
-    <section id="contact" className="py-16 md:py-32 bg-gray-50 dark:bg-transparent">
+    <section id="contact" className="py-16 md:py-32 bg-muted/30">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="grid items-center gap-12 md:grid-cols-2 md:gap-12 lg:grid-cols-5 lg:gap-24">
-          <div className="lg:col-span-2">
-            <div className="md:pr-6 lg:pr-0">
-              <h2 className="text-4xl font-semibold lg:text-5xl text-center md:text-left">
-                Hablemos de tu proyecto
-              </h2>
-            </div>
-            <ul className="mt-8 space-y-4 *:flex *:items-center *:gap-3 *:py-3 *:justify-center md:*:justify-start *:border-b *:border-gray-200 dark:*:border-gray-700 *:pb-3 *:max-w-xs *:mx-auto md:*:mx-0">
+        <div className="grid items-start gap-12 lg:grid-cols-5 lg:gap-16">
+          {/* Información de contacto - 40% */}
+          <div className="lg:col-span-2 lg:pt-6">
+            <h2 className="text-4xl font-semibold lg:text-5xl mb-6">
+              Hablemos de tu proyecto
+            </h2>
+            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+              Queremos conocer tu marca.<br />
+              Cuéntanos en qué etapa estás y qué tipo de proyecto te gustaría desarrollar.<br />
+              Te responderemos a la brevedad para coordinar una reunión.
+            </p>
+            <ul className="space-y-6 text-muted-foreground">
               <li>
-                <Link href="#link" className="hover:text-accent-foreground">
-                  <Mail className="size-5 mr-2 inline" />
+                <Link href="#link" className="hover:text-foreground transition-colors flex items-center gap-3">
+                  <Mail className="size-5" />
                   <span>contacto@estudiomud.com</span>
                 </Link>
               </li>
               <li>
-                <Link href="#link" className="hover:text-accent-foreground">
-                  <MapPin className="size-5 mr-2 inline" />
+                <Link href="#link" className="hover:text-foreground transition-colors flex items-center gap-3">
+                  <MapPin className="size-5" />
                   <span>Vitacura, Santiago</span>
                 </Link>
               </li>
             </ul>
           </div>
+
+          {/* Formulario - 60% */}
           <div className="lg:col-span-3">
-            <Card className="mx-auto mt-12 max-w-lg p-8 shadow-md sm:p-16 w-full">
+            <Card className="p-6 shadow-md sm:p-8">
                 <div>
                   <h3 className="text-lg font-semibold">
                     Queremos conocer tu marca
@@ -45,88 +51,228 @@ export default function FeaturesSection() {
                   </p>
                 </div>
 
-                <form
-                  action="https://formspree.io/f/mjkepqyo"
-                  method="POST"
-                  className="**:[&>label]:block mt-6 space-y-6 *:space-y-3"
-                  onSubmit={(e) => {
-                    const formData = new FormData(e.currentTarget);
-                    const name = formData.get('name');
-                    const params = new URLSearchParams();
-                    params.set('success', 'true');
-                    if (name) {
-                      params.set('name', name.toString());
-                    }
-                    const nextUrl = `${window.location.origin}/gracias?${params.toString()}`;
-                    const hiddenInput = e.currentTarget.querySelector('input[name="_next"]') as HTMLInputElement;
+                  <form
+                    action="https://formspree.io/f/mjkepqyo"
+                    method="POST"
+                    className="**:[&>label]:block mt-6 space-y-6 *:space-y-3"
+                    onSubmit={(e) => {
+                      const formData = new FormData(e.currentTarget);
+                      const name = formData.get('name');
+                      const params = new URLSearchParams();
+                      params.set('success', 'true');
+                      if (name) {
+                        params.set('name', name.toString());
+                      }
+                      const nextUrl = `${window.location.origin}/gracias?${params.toString()}`;
+                      const hiddenInput = e.currentTarget.querySelector('input[name="_next"]') as HTMLInputElement;
 
-                    if (hiddenInput) {
-                      hiddenInput.value = nextUrl;
-                    }
-                  }}
-                >
-                  <input type="hidden" name="_next" value={`${typeof window !== 'undefined' ? window.location.origin : ''}/gracias`} />
+                      if (hiddenInput) {
+                        hiddenInput.value = nextUrl;
+                      }
+                    }}
+                  >
+                    <input type="hidden" name="_next" value={`${typeof window !== 'undefined' ? window.location.origin : ''}/gracias`} />
+
+                    {/* Nombre y Email en 50/50 */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="name">Nombre</Label>
+                        <Input 
+                          type="text" 
+                          id="name" 
+                          name="name" 
+                          required 
+                          pattern="[A-Za-z\s]+"
+                          title="Solo se permiten letras y espacios"
+                          onInvalid={(e) => {
+                            const target = e.target as HTMLInputElement;
+                            if (target.validity.valueMissing) {
+                              target.setCustomValidity('Por favor ingresa tu nombre');
+                            } else if (target.validity.patternMismatch) {
+                              target.setCustomValidity('Solo se permiten letras y espacios');
+                            }
+                          }}
+                          onInput={(e) => {
+                            const target = e.target as HTMLInputElement;
+                            target.setCustomValidity('');
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="email">Email</Label>
+                        <Input 
+                          type="email" 
+                          id="email" 
+                          name="email" 
+                          required 
+                          onInvalid={(e) => {
+                            const target = e.target as HTMLInputElement;
+                            if (target.validity.valueMissing) {
+                              target.setCustomValidity('Por favor ingresa tu email');
+                            } else if (target.validity.typeMismatch) {
+                              target.setCustomValidity('Por favor ingresa un email válido');
+                            }
+                          }}
+                          onInput={(e) => {
+                            const target = e.target as HTMLInputElement;
+                            target.setCustomValidity('');
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Empresa e Instagram en 50/50 */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="company">Empresa o marca</Label>
+                        <Input 
+                          type="text" 
+                          id="company" 
+                          name="company" 
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="instagram">Instagram o sitio actual</Label>
+                        <Input 
+                          type="text" 
+                          id="instagram" 
+                          name="instagram" 
+                          placeholder="@tuinstagram o www.tusitio.com"
+                        />
+                      </div>
+                    </div>
+
 
                   <div>
-                    <Label htmlFor="name">Nombre</Label>
-                    <Input 
-                      type="text" 
-                      id="name" 
-                      name="name" 
-                      required 
-                      pattern="[A-Za-z\s]+"
-                      title="Solo se permiten letras y espacios"
-                    />
+                    <Label htmlFor="service">¿Qué tipo de proyecto necesitas?</Label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-3">
+                      <div className="space-y-4">
+                        <label className="flex items-center space-x-3 cursor-pointer">
+                          <input 
+                            type="radio" 
+                            name="service" 
+                            value="E-commerce en Shopify" 
+                            className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
+                          />
+                          <span className="text-sm">E-commerce en Shopify</span>
+                        </label>
+                        <label className="flex items-center space-x-3 cursor-pointer">
+                          <input 
+                            type="radio" 
+                            name="service" 
+                            value="Landing page o micrositio" 
+                            className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
+                          />
+                          <span className="text-sm">Landing page o micrositio</span>
+                        </label>
+                        <label className="flex items-center space-x-3 cursor-pointer">
+                          <input 
+                            type="radio" 
+                            name="service" 
+                            value="Sitio web institucional o de marca" 
+                            className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
+                          />
+                          <span className="text-sm">Sitio web institucional o de marca</span>
+                        </label>
+                      </div>
+                      <div className="space-y-4">
+                        <label className="flex items-center space-x-3 cursor-pointer">
+                          <input 
+                            type="radio" 
+                            name="service" 
+                            value="Rediseño o mejora de tu web actual" 
+                            className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
+                          />
+                          <span className="text-sm">Rediseño o mejora de tu web actual</span>
+                        </label>
+                        <label className="flex items-center space-x-3 cursor-pointer">
+                          <input 
+                            type="radio" 
+                            name="service" 
+                            value="Integraciones y automatizaciones" 
+                            className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
+                          />
+                          <span className="text-sm">Integraciones y automatizaciones</span>
+                        </label>
+                        <label className="flex items-center space-x-3 cursor-pointer">
+                          <input 
+                            type="radio" 
+                            name="service" 
+                            value="E-commerce B2B o corporativo" 
+                            className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
+                          />
+                          <span className="text-sm">E-commerce B2B o corporativo</span>
+                        </label>
+                      </div>
+                    </div>
                   </div>
 
                   <div>
-                    <Label htmlFor="email">Email</Label>
-                    <Input type="email" id="email" name="email" required />
+                    <Label htmlFor="timeline">Plazo estimado (opcional)</Label>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3 justify-items-center">
+                      <label className="flex items-center space-x-2 cursor-pointer">
+                        <input 
+                          type="radio" 
+                          name="timeline" 
+                          value="En menos de 1 mes" 
+                          className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
+                        />
+                        <span className="text-sm">En menos de 1 mes</span>
+                      </label>
+                      <label className="flex items-center space-x-2 cursor-pointer">
+                        <input 
+                          type="radio" 
+                          name="timeline" 
+                          value="En 1 a 3 meses" 
+                          className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
+                        />
+                        <span className="text-sm">En 1 a 3 meses</span>
+                      </label>
+                      <label className="flex items-center space-x-2 cursor-pointer">
+                        <input 
+                          type="radio" 
+                          name="timeline" 
+                          value="En 3 a 6 meses" 
+                          className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
+                        />
+                        <span className="text-sm">En 3 a 6 meses</span>
+                      </label>
+                      <label className="flex items-center space-x-2 cursor-pointer">
+                        <input 
+                          type="radio" 
+                          name="timeline" 
+                          value="Sin fecha definida" 
+                          className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
+                        />
+                        <span className="text-sm">Sin fecha definida</span>
+                      </label>
+                    </div>
                   </div>
 
-                  {/* <div>
-                            <Label htmlFor="country">Country/Region</Label>
-                            <Select>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select Country/Region" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="1">DR Congo</SelectItem>
-                                    <SelectItem value="2">United States</SelectItem>
-                                    <SelectItem value="3">France</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div> */}
-
-                  {/* <div>
-                            <Label htmlFor="website">Company Website</Label>
-                            <Input type="url" id="website" />
-                            <span className="text-muted-foreground inline-block text-sm">Must start with 'https'</span>
-                        </div> */}
-
-                  {/* <div>
-                            <Label htmlFor="job">Job function</Label>
-                            <Select>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select Job Function" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="1">Finance</SelectItem>
-                                    <SelectItem value="2">Education</SelectItem>
-                                    <SelectItem value="3">Legal</SelectItem>
-                                    <SelectItem value="4">More</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div> */}
 
                   <div>
                     <Label htmlFor="msg">Mensaje</Label>
-                    <Textarea id="msg" name="message" rows={3} required />
+                    <Textarea 
+                      id="msg" 
+                      name="message" 
+                      rows={3} 
+                      required 
+                      onInvalid={(e) => {
+                        const target = e.target as HTMLTextAreaElement;
+                        if (target.validity.valueMissing) {
+                          target.setCustomValidity('Por favor ingresa tu mensaje');
+                        }
+                      }}
+                      onInput={(e) => {
+                        const target = e.target as HTMLTextAreaElement;
+                        target.setCustomValidity('');
+                      }}
+                    />
                   </div>
 
-                  <Button type="submit">Enviar</Button>
+                  <Button type="submit" className="w-full mt-2">Enviar</Button>
                 </form>
-              </Card>
+            </Card>
           </div>
         </div>
       </div>

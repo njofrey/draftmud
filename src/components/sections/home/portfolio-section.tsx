@@ -7,11 +7,11 @@ import Image from "next/image";
 export default function PortfolioSection() {
   return (
     <section
-      className="py-16 md:py-32 bg-muted/30"
+      className="py-12 md:py-20 bg-muted/30"
       id="portfolio"
     >
-      <div className="mx-auto max-w-6xl space-y-12 px-6">
-        <div className="text-center space-y-4">
+      <div className="mx-auto max-w-6xl space-y-8 px-6">
+        <div className="text-center">
           <InView
             variants={{
               hidden: { opacity: 0, y: 20 },
@@ -23,7 +23,7 @@ export default function PortfolioSection() {
             }}
             viewOptions={{ margin: "0px 0px -100px 0px" }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Últimos proyectos
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

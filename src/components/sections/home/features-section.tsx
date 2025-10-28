@@ -6,12 +6,12 @@ const FEATURES = [
   "Navegación fluida en desktop y móvil", 
   "Carga rápida y optimizada",
   "Integración con pagos y envíos",
-  "Correos automáticos y seguimiento básico",
-  "Experiencia pensada para generar confianza",
-  "Conexión con Google y redes sociales",
+  "Automatizaciones de venta y postventa",
+  "Diseño orientado a conversión real",
+  "Integración con Google y Meta",
   "Panel de ventas y estadísticas",
   "Soporte humano y acompañamiento real",
-  "Base lista para escalar y crecer con tu marca"
+  "Listo para escalar y crecer con tu marca"
 ];
 
 export default function FeaturesSection() {

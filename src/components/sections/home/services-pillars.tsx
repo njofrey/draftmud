@@ -108,7 +108,7 @@ function PillarBlock({ pillar, isReversed = false }: { pillar: typeof PILLARS[0]
     <section className="py-24 bg-muted/30">
       <div className="mx-auto max-w-6xl px-6">
         {/* Título y subtítulo centrados */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 px-6 md:px-24 lg:px-32 xl:px-40">
           <InView
             variants={{
               hidden: { opacity: 0, y: 20 },
@@ -118,8 +118,8 @@ function PillarBlock({ pillar, isReversed = false }: { pillar: typeof PILLARS[0]
             viewOptions={{ margin: "0px 0px -100px 0px" }}
           >
             <div className="space-y-4">
-              <div className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
-                {pillar.id}: {pillar.label}
+              <div className="text-sm font-medium tracking-widest text-muted-foreground uppercase">
+                {pillar.label}
               </div>
               
               <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
