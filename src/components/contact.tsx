@@ -16,8 +16,8 @@ export default function FeaturesSection() {
           {/* Información de contacto - 40% */}
           <div className="lg:col-span-2 lg:pt-6">
             <h2 className="text-4xl font-semibold lg:text-5xl mb-6">
-              Hablemos de tu proyecto
-            </h2>
+                Hablemos de tu proyecto
+              </h2>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
               Queremos conocer tu marca.<br />
               Cuéntanos en qué etapa estás y qué tipo de proyecto te gustaría desarrollar.<br />
@@ -42,48 +42,40 @@ export default function FeaturesSection() {
           {/* Formulario - 60% */}
           <div className="lg:col-span-3">
             <Card className="p-6 shadow-md sm:p-8">
-                <div>
-                  <h3 className="text-lg font-semibold">
-                    Queremos conocer tu marca
-                  </h3>
-                  <p className="mt-4 text-sm">
-                    Déjanos tus datos y te responderemos a la brevedad para explorar cómo podemos trabajar juntos.
-                  </p>
-                </div>
 
-                  <form
-                    action="https://formspree.io/f/mjkepqyo"
-                    method="POST"
-                    className="**:[&>label]:block mt-6 space-y-6 *:space-y-3"
-                    onSubmit={(e) => {
-                      const formData = new FormData(e.currentTarget);
-                      const name = formData.get('name');
-                      const params = new URLSearchParams();
-                      params.set('success', 'true');
-                      if (name) {
-                        params.set('name', name.toString());
-                      }
-                      const nextUrl = `${window.location.origin}/gracias?${params.toString()}`;
-                      const hiddenInput = e.currentTarget.querySelector('input[name="_next"]') as HTMLInputElement;
+                <form
+                  action="https://formspree.io/f/mjkepqyo"
+                  method="POST"
+                  className="**:[&>label]:block mt-6 space-y-6 *:space-y-3"
+                  onSubmit={(e) => {
+                    const formData = new FormData(e.currentTarget);
+                    const name = formData.get('name');
+                    const params = new URLSearchParams();
+                    params.set('success', 'true');
+                    if (name) {
+                      params.set('name', name.toString());
+                    }
+                    const nextUrl = `${window.location.origin}/gracias?${params.toString()}`;
+                    const hiddenInput = e.currentTarget.querySelector('input[name="_next"]') as HTMLInputElement;
 
-                      if (hiddenInput) {
-                        hiddenInput.value = nextUrl;
-                      }
-                    }}
-                  >
-                    <input type="hidden" name="_next" value={`${typeof window !== 'undefined' ? window.location.origin : ''}/gracias`} />
+                    if (hiddenInput) {
+                      hiddenInput.value = nextUrl;
+                    }
+                  }}
+                >
+                  <input type="hidden" name="_next" value={`${typeof window !== 'undefined' ? window.location.origin : ''}/gracias`} />
 
                     {/* Nombre y Email en 50/50 */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="name">Nombre</Label>
-                        <Input 
-                          type="text" 
-                          id="name" 
-                          name="name" 
-                          required 
-                          pattern="[A-Za-z\s]+"
-                          title="Solo se permiten letras y espacios"
+                  <div>
+                    <Label htmlFor="name" className="mb-2">Nombre</Label>
+                    <Input 
+                      type="text" 
+                      id="name" 
+                      name="name" 
+                      required 
+                      pattern="[A-Za-z\s]+"
+                      title="Solo se permiten letras y espacios"
                           onInvalid={(e) => {
                             const target = e.target as HTMLInputElement;
                             if (target.validity.valueMissing) {
@@ -99,7 +91,7 @@ export default function FeaturesSection() {
                         />
                       </div>
                       <div>
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="email" className="mb-2">Email</Label>
                         <Input 
                           type="email" 
                           id="email" 
@@ -121,25 +113,15 @@ export default function FeaturesSection() {
                       </div>
                     </div>
 
-                    {/* Empresa e Instagram en 50/50 */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="company">Empresa o marca</Label>
-                        <Input 
-                          type="text" 
-                          id="company" 
-                          name="company" 
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="instagram">Instagram o sitio actual</Label>
-                        <Input 
-                          type="text" 
-                          id="instagram" 
-                          name="instagram" 
-                          placeholder="@tuinstagram o www.tusitio.com"
-                        />
-                      </div>
+                    {/* Instagram o sitio actual */}
+                    <div>
+                      <Label htmlFor="instagram" className="mb-2">Instagram o sitio actual (opcional)</Label>
+                      <Input 
+                        type="text" 
+                        id="instagram" 
+                        name="instagram" 
+                        placeholder="@tuempresa o www.tusitio.cl"
+                      />
                     </div>
 
 
@@ -151,31 +133,21 @@ export default function FeaturesSection() {
                           <input 
                             type="radio" 
                             name="service" 
-                            value="E-commerce en Shopify" 
+                            value="E-commerce" 
                             className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
+                            required
                           />
-                          <span className="text-sm">E-commerce en Shopify</span>
+                          <span className="text-sm">E-commerce</span>
                         </label>
                         <label className="flex items-center space-x-3 cursor-pointer">
                           <input 
                             type="radio" 
                             name="service" 
-                            value="Landing page o micrositio" 
+                            value="Landing page o sitio web" 
                             className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
                           />
-                          <span className="text-sm">Landing page o micrositio</span>
+                          <span className="text-sm">Landing page o sitio web</span>
                         </label>
-                        <label className="flex items-center space-x-3 cursor-pointer">
-                          <input 
-                            type="radio" 
-                            name="service" 
-                            value="Sitio web institucional o de marca" 
-                            className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
-                          />
-                          <span className="text-sm">Sitio web institucional o de marca</span>
-                        </label>
-                      </div>
-                      <div className="space-y-4">
                         <label className="flex items-center space-x-3 cursor-pointer">
                           <input 
                             type="radio" 
@@ -185,6 +157,8 @@ export default function FeaturesSection() {
                           />
                           <span className="text-sm">Rediseño o mejora de tu web actual</span>
                         </label>
+                      </div>
+                      <div className="space-y-4">
                         <label className="flex items-center space-x-3 cursor-pointer">
                           <input 
                             type="radio" 
@@ -198,65 +172,35 @@ export default function FeaturesSection() {
                           <input 
                             type="radio" 
                             name="service" 
-                            value="E-commerce B2B o corporativo" 
+                            value="Email Marketing" 
                             className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
                           />
-                          <span className="text-sm">E-commerce B2B o corporativo</span>
+                          <span className="text-sm">Email Marketing</span>
+                        </label>
+                        <label className="flex items-center space-x-3 cursor-pointer">
+                          <input 
+                            type="radio" 
+                            name="service" 
+                            value="Otro" 
+                            className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
+                          />
+                          <span className="text-sm">Otro</span>
                         </label>
                       </div>
                     </div>
                   </div>
 
-                  <div>
-                    <Label htmlFor="timeline">Plazo estimado (opcional)</Label>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3 justify-items-center">
-                      <label className="flex items-center space-x-2 cursor-pointer">
-                        <input 
-                          type="radio" 
-                          name="timeline" 
-                          value="En menos de 1 mes" 
-                          className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
-                        />
-                        <span className="text-sm">En menos de 1 mes</span>
-                      </label>
-                      <label className="flex items-center space-x-2 cursor-pointer">
-                        <input 
-                          type="radio" 
-                          name="timeline" 
-                          value="En 1 a 3 meses" 
-                          className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
-                        />
-                        <span className="text-sm">En 1 a 3 meses</span>
-                      </label>
-                      <label className="flex items-center space-x-2 cursor-pointer">
-                        <input 
-                          type="radio" 
-                          name="timeline" 
-                          value="En 3 a 6 meses" 
-                          className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
-                        />
-                        <span className="text-sm">En 3 a 6 meses</span>
-                      </label>
-                      <label className="flex items-center space-x-2 cursor-pointer">
-                        <input 
-                          type="radio" 
-                          name="timeline" 
-                          value="Sin fecha definida" 
-                          className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
-                        />
-                        <span className="text-sm">Sin fecha definida</span>
-                      </label>
-                    </div>
-                  </div>
+                  {/* Plazo estimado eliminado */}
 
 
                   <div>
-                    <Label htmlFor="msg">Mensaje</Label>
+                    <Label htmlFor="msg" className="mb-2">Mensaje</Label>
                     <Textarea 
                       id="msg" 
                       name="message" 
                       rows={3} 
                       required 
+                      placeholder="Cuéntanos brevemente tu proyecto"
                       onInvalid={(e) => {
                         const target = e.target as HTMLTextAreaElement;
                         if (target.validity.valueMissing) {
@@ -272,7 +216,7 @@ export default function FeaturesSection() {
 
                   <Button type="submit" className="w-full mt-2">Enviar</Button>
                 </form>
-            </Card>
+              </Card>
           </div>
         </div>
       </div>

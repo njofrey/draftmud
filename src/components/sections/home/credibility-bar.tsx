@@ -87,9 +87,9 @@ function Tooltip({ source, detail }: { source: string; detail: string }) {
 
 export default function CredibilityBar() {
   return (
-    <section className="py-12 md:py-16">
+    <section className="py-8 md:py-12">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="rounded-2xl border border-border/20 bg-[#EDF9EC] dark:bg-[#1a2e1a] p-8 md:p-12">
+        <div className="p-8 md:p-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
           {STATS.map((item, index) => (
             <InView

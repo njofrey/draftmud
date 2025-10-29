@@ -2,51 +2,42 @@
 import { useState } from "react";
 import { InView } from "@/components/motion-primitives/in-view";
 
-const PILLARS = [
+const SERVICES = [
   {
     id: 1,
-    label: "DISEÑO WEB",
-    title: "Diseño que convierte estética en rendimiento",
-    subtitle: "Creamos sitios pensados para vender, no solo para verse bien",
+    title: "Diseño Web Estratégico",
+    description: "Convertimos estética en rendimiento. Creamos sitios pensados para vender, no solo para verse bien, con un enfoque en conversión y experiencia de usuario optimizada.",
     features: [
       "UI/UX Design",
       "Landing Pages", 
       "Responsive Design",
       "Testing A/B",
       "Identidad visual aplicada"
-    ],
-    value: "",
-    image: "/images/placeholder-design.jpg"
+    ]
   },
   {
     id: 2,
-    label: "E-COMMERCE",
-    title: "Tiendas que venden y crecen contigo",
-    subtitle: "E-commerce escalable con integraciones locales y métricas en tiempo real",
+    title: "E-commerce Escalable",
+    description: "Tiendas que venden y crecen contigo. E-commerce escalable con integraciones locales, métricas en tiempo real y soporte continuo para tu crecimiento.",
     features: [
       "Shopify 2.0 y Checkout optimizado",
       "Integraciones locales (pagos, despacho, ERP)",
       "Email marketing y retención",
       "Análisis y métricas en tiempo real",
       "Soporte y evolución continua"
-    ],
-    value: "",
-    image: "/images/placeholder-ecommerce.jpg"
+    ]
   },
   {
     id: 3,
-    label: "EXPERIENCIA & MARCA",
-    title: "Tu marca como experiencia completa",
-    subtitle: "Storytelling visual que conecta y convierte en cada interacción",
+    title: "Experiencia & Marca Digital",
+    description: "Tu marca como experiencia completa. Storytelling visual que conecta y convierte en cada interacción, creando una identidad digital memorable y efectiva.",
     features: [
       "Storytelling visual y tono de marca",
       "Arquitectura de contenido",
       "Fotografía y dirección de arte",
       "Animaciones y microinteracciones",
       "Optimización SEO y Core Web Vitals"
-    ],
-    value: "",
-    image: "/images/placeholder-brand.jpg"
+    ]
   }
 ];
 
@@ -93,112 +84,102 @@ function AccordionItem({ feature, isOpen, onToggle }: { feature: string; isOpen:
   );
 }
 
-function PillarBlock({ pillar, isReversed = false }: { pillar: typeof PILLARS[0]; isReversed?: boolean }) {
+function ServiceBlock({ service, index }: { service: typeof SERVICES[0]; index: number }) {
   const [openItems, setOpenItems] = useState<number[]>([]);
 
-  const toggleItem = (index: number) => {
+  const toggleItem = (featureIndex: number) => {
     setOpenItems(prev => 
-      prev.includes(index) 
-        ? prev.filter(i => i !== index)
-        : [...prev, index]
+      prev.includes(featureIndex) 
+        ? prev.filter(i => i !== featureIndex)
+        : [...prev, featureIndex]
     );
   };
 
   return (
-    <section className="py-24 bg-muted/30">
-      <div className="mx-auto max-w-6xl px-6">
-        {/* Título y subtítulo centrados */}
-        <div className="text-center mb-16 px-6 md:px-24 lg:px-32 xl:px-40">
-          <InView
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0 },
-            }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            viewOptions={{ margin: "0px 0px -100px 0px" }}
-          >
-            <div className="space-y-4">
-              <div className="text-sm font-medium tracking-widest text-muted-foreground uppercase">
-                {pillar.label}
+    <div className={`sticky top-16 bg-background ${index > 0 ? 'shadow-[0_-2px_4px_-1px_rgba(0,0,0,0.04)]' : ''}`}>
+      <InView
+        variants={{
+          hidden: { opacity: 0, y: 100 },
+          visible: { 
+            opacity: 1, 
+            y: 0,
+            transition: { 
+              duration: 1.2, 
+              ease: "easeOut"
+            }
+          },
+        }}
+        viewOptions={{ margin: "0px 0px -200px 0px" }}
+      >
+        <div className="w-full py-16 md:py-20">
+          <div className="mx-auto max-w-6xl px-6">
+            {/* Header integrado */}
+            {index === 0 && (
+              <div className="text-center mb-16">
+                <InView
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  viewOptions={{ margin: "0px 0px -100px 0px" }}
+                >
+                  <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                    Nuestros servicios
+                  </h2>
+                  <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                    Soluciones integrales para transformar tu presencia digital y generar resultados medibles.
+                  </p>
+                </InView>
+              </div>
+            )}
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+              {/* Columna izquierda - Título y descripción */}
+              <div className="space-y-6">
+                <div className="text-sm font-mono tracking-widest text-primary uppercase" style={{ fontFamily: 'Supply Mono, monospace' }}>
+                  {String(index + 1).padStart(2, '0')}/03
+                </div>
+                <h2 className="text-3xl lg:text-4xl font-bold leading-tight">
+                  {service.title}
+                </h2>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  {service.description}
+                </p>
               </div>
               
-              <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
-                {pillar.title}
-              </h2>
-              
-              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                {pillar.subtitle}
-              </p>
-            </div>
-          </InView>
-        </div>
-
-        {/* Split 50/50 para acordeones e imagen */}
-        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start ${isReversed ? 'lg:grid-flow-col-dense' : ''}`}>
-          {/* Columna de acordeones */}
-          <div className={`${isReversed ? 'lg:col-start-2' : ''} flex justify-center`}>
-            <div className="w-full max-w-md">
-              <InView
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 },
-                }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                viewOptions={{ margin: "0px 0px -100px 0px" }}
-              >
-                <div className="space-y-2">
-                  {pillar.features.map((feature, index) => (
-                    <AccordionItem
-                      key={feature}
-                      feature={feature}
-                      isOpen={openItems.includes(index)}
-                      onToggle={() => toggleItem(index)}
-                    />
-                  ))}
-                </div>
-              </InView>
-            </div>
-          </div>
-          
-          {/* Columna de imagen */}
-          <div className={`${isReversed ? 'lg:col-start-1' : ''} flex items-center justify-center`}>
-            <div className="w-full max-w-lg">
-              <InView
-                variants={{
-                  hidden: { opacity: 0, scale: 0.95 },
-                  visible: { opacity: 1, scale: 1 },
-                }}
-                transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-                viewOptions={{ margin: "0px 0px -100px 0px" }}
-              >
-                <div className="relative w-full">
-                  <div className="aspect-[4/3] bg-muted rounded-2xl flex items-center justify-center">
-                    <div className="text-center text-muted-foreground">
-                      <div className="text-6xl mb-4">🎨</div>
-                      <p className="text-lg font-medium">Mockup {pillar.label}</p>
-                      <p className="text-sm">Placeholder image</p>
-                    </div>
+              {/* Columna derecha - Acordeones */}
+              <div className="flex justify-center">
+                <div className="w-full max-w-md">
+                  <div className="space-y-2">
+                    {service.features.map((feature, featureIndex) => (
+                      <AccordionItem
+                        key={feature}
+                        feature={feature}
+                        isOpen={openItems.includes(featureIndex)}
+                        onToggle={() => toggleItem(featureIndex)}
+                      />
+                    ))}
                   </div>
                 </div>
-              </InView>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </InView>
+    </div>
   );
 }
 
 export default function ServicesPillars() {
   return (
-    <div>
-      {PILLARS.map((pillar, index) => (
-        <PillarBlock 
-          key={pillar.id} 
-          pillar={pillar} 
-          isReversed={index % 2 === 1} 
-        />
-      ))}
-    </div>
+    <section className="bg-muted/30">
+      {/* Secciones sticky que se apilan progresivamente */}
+      <div className="w-full">
+        {SERVICES.map((service, index) => (
+          <ServiceBlock key={service.id} service={service} index={index} />
+        ))}
+      </div>
+    </section>
   );
 }
