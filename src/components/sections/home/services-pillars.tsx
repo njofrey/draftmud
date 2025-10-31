@@ -41,19 +41,23 @@ const SERVICES = [
 ];
 
 export default function ServicesPillars() {
-  const [openIndex, setOpenIndex] = useState<number>(0); // Primero abierto por defecto
+  const [openIndexes, setOpenIndexes] = useState<Set<number>>(new Set()); // Todas cerradas por defecto
 
   const toggleService = (index: number) => {
-    if (openIndex === index) {
-      setOpenIndex(-1); // Cerrar si está abierto
-    } else {
-      setOpenIndex(index); // Abrir y cerrar el anterior
-    }
+    setOpenIndexes(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index); // Cerrar si está abierto
+      } else {
+        newSet.add(index); // Abrir sin cerrar otras
+      }
+      return newSet;
+    });
   };
 
   return (
     <section className="pt-12 pb-8 md:pt-20 md:pb-12">
-      <div className="mx-auto max-w-6xl pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] md:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl pl-[max(1.25rem,env(safe-area-inset-left))] pr-[max(1.25rem,env(safe-area-inset-right))] md:px-6 lg:px-8">
         <div className="mb-16">
           <h2 className="migra-xl text-xl leading-tight mb-6">
             Nuestros servicios
@@ -71,7 +75,7 @@ export default function ServicesPillars() {
           }}></div>
           
           {SERVICES.map((service, index) => {
-            const isOpen = openIndex === index;
+            const isOpen = openIndexes.has(index);
             
             return (
               <div key={service.id}>
@@ -88,7 +92,7 @@ export default function ServicesPillars() {
                 
                 <button
                   onClick={() => toggleService(index)}
-                  className="w-full text-left py-6 flex items-center gap-4 hover:opacity-80 transition-all duration-200 group cursor-pointer"
+                  className="w-full text-left py-6 px-2 md:px-0 flex items-center gap-4 hover:opacity-80 transition-all duration-200 group cursor-pointer"
                 >
                   <span className={`text-2xl font-light transition-all duration-500 ease-in-out transform flex-shrink-0 w-8 flex items-center justify-center ${
                     isOpen ? 'rotate-90 scale-110' : 'rotate-0 scale-100'
@@ -103,7 +107,7 @@ export default function ServicesPillars() {
                 <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
                   isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
                 }`}>
-                  <div className="pb-8 space-y-6 pt-2 pl-12">
+                  <div className="pb-8 space-y-6 pt-2 pl-8 md:pl-12">
                     <p className={`text-lg text-muted-foreground leading-relaxed max-w-[36ch] transition-all duration-500 delay-100 ${
                       isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
                     }`}>

@@ -11,23 +11,36 @@ export const HeroHeader = () => {
   const [menuState, setMenuState] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [isVisible, setIsVisible] = React.useState(true);
+  const [isMenuClosing, setIsMenuClosing] = React.useState(false);
   const lastScrollY = React.useRef(typeof window !== 'undefined' ? window.scrollY : 0);
   const inactivityTimerRef = React.useRef<NodeJS.Timeout | null>(null);
 
   // Función para cerrar menú al hacer click en un link
   const handleLinkClick = () => {
+    setIsMenuClosing(true);
     setMenuState(false);
+    setTimeout(() => {
+      setIsMenuClosing(false);
+    }, 350);
   };
 
   // Función para cerrar menú al hacer click en el overlay
   const handleOverlayClick = () => {
+    setIsMenuClosing(true);
     setMenuState(false);
+    setTimeout(() => {
+      setIsMenuClosing(false);
+    }, 350);
   };
 
   // Función para cerrar menú con tecla Escape
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
+      setIsMenuClosing(true);
       setMenuState(false);
+      setTimeout(() => {
+        setIsMenuClosing(false);
+      }, 350);
     }
   };
 
@@ -71,6 +84,12 @@ export const HeroHeader = () => {
             return;
           }
           
+          // No cambiar visibilidad si el menú acaba de cerrarse
+          if (isMenuClosing) {
+            ticking = false;
+            return;
+          }
+          
           // Siempre visible en el top
           if (currentScrollY < 10) {
             setIsVisible(true);
@@ -95,9 +114,14 @@ export const HeroHeader = () => {
     // Inicializar
     lastScrollY.current = window.scrollY;
     
+    // Cuando el menú se cierra, asegurar que el header sea visible
+    if (!menuState) {
+      setIsVisible(true);
+    }
+    
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [menuState]);
+  }, [menuState, isMenuClosing]);
 
   // Manejar tecla Escape, prevenir scroll y auto-cerrar por inactividad
   React.useEffect(() => {
@@ -147,7 +171,7 @@ export const HeroHeader = () => {
           transform: isVisible || menuState ? 'translateY(0)' : 'translateY(-100%)',
           opacity: isVisible || menuState ? 1 : 0,
           pointerEvents: isVisible || menuState ? 'auto' : 'none',
-          transition: 'transform 0.3s ease-in-out, opacity 0.3s ease-in-out',
+          transition: isMenuClosing ? 'none' : 'transform 0.3s ease-in-out, opacity 0.3s ease-in-out',
         }}
         className={cn(
           "fixed w-full px-2",
@@ -174,7 +198,15 @@ export const HeroHeader = () => {
               </Link>
 
               <button
-                onClick={() => setMenuState(!menuState)}
+                onClick={() => {
+                  if (menuState) {
+                    setIsMenuClosing(true);
+                    setTimeout(() => {
+                      setIsMenuClosing(false);
+                    }, 350);
+                  }
+                  setMenuState(!menuState);
+                }}
                 aria-label={menuState == true ? "Close Menu" : "Open Menu"}
                 aria-expanded={menuState}
                 aria-controls="mobile-menu"

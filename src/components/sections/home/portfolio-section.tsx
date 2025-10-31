@@ -11,6 +11,15 @@ export default function PortfolioSection() {
       id="portfolio"
     >
       <div className="mx-auto max-w-6xl space-y-8 pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] md:px-6 lg:px-8">
+        <div className="mt-6 mb-8 h-px" style={{
+          width: '100vw',
+          marginLeft: 'calc(-50vw + 50%)',
+          backgroundImage: 'radial-gradient(circle, rgb(0 0 0 / 0.2) 0.5px, transparent 0.5px)',
+          backgroundSize: '3px 1px',
+          backgroundPosition: '0 center',
+          backgroundRepeat: 'repeat-x'
+        }}></div>
+        
         <div>
           <InView
             variants={{
@@ -43,15 +52,17 @@ export default function PortfolioSection() {
           }}
           viewOptions={{ margin: "0px 0px -100px 0px" }}
         >
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-2 md:gap-12">
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-3 md:gap-12">
             {PORTFOLIO_CONTENT.map((project, index) => {
               const aspectPattern = [
                 "aspect-[2/3] md:aspect-[2/3]",
                 "aspect-[5/6] md:aspect-[5/6]",
                 "aspect-[5/6] md:aspect-[5/6]",
                 "aspect-[2/3] md:aspect-[2/3]",
+                "aspect-[2/3] md:aspect-[2/3]",
+                "aspect-[5/6] md:aspect-[5/6]",
               ];
-              const imageAspectClass = aspectPattern[index % 4];
+              const imageAspectClass = aspectPattern[index % 6];
               return (
               <div key={index} className="space-y-6">
                 <div className={`group relative w-full ${imageAspectClass} overflow-hidden rounded-2xl bg-muted`}>
