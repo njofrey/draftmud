@@ -26,7 +26,7 @@ export default function FeaturesSection() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           viewOptions={{ margin: "0px 0px -100px 0px" }}
         >
-          <h2 className="text-center text-3xl md:text-4xl font-bold mb-12">
+          <h2 className="migra-xl text-center text-3xl md:text-4xl mb-12">
             Todos nuestros sitios web incluyen:
           </h2>
         </InView>

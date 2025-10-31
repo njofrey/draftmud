@@ -7,11 +7,11 @@ import Image from "next/image";
 export default function PortfolioSection() {
   return (
     <section
-      className="py-12 md:py-20 bg-muted/30"
+    className="pt-12 pb-8 md:pt-20 md:pb-12"
       id="portfolio"
     >
-      <div className="mx-auto max-w-6xl space-y-8 px-6">
-        <div className="text-center">
+      <div className="mx-auto max-w-6xl space-y-8 pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] md:px-6 lg:px-8">
+        <div>
           <InView
             variants={{
               hidden: { opacity: 0, y: 20 },
@@ -23,10 +23,10 @@ export default function PortfolioSection() {
             }}
             viewOptions={{ margin: "0px 0px -100px 0px" }}
           >
-                   <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                   <h2 className="migra-xl text-4xl md:text-5xl mb-6">
                      Portfolio
                    </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-[36ch]">
               Proyectos que han transformado negocios y generado resultados medibles para nuestros clientes en diferentes industrias.
             </p>
           </InView>
@@ -43,11 +43,18 @@ export default function PortfolioSection() {
           }}
           viewOptions={{ margin: "0px 0px -100px 0px" }}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {PORTFOLIO_CONTENT.map((project, index) => (
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-2 md:gap-12">
+            {PORTFOLIO_CONTENT.map((project, index) => {
+              const aspectPattern = [
+                "aspect-[2/3] md:aspect-[2/3]",
+                "aspect-[5/6] md:aspect-[5/6]",
+                "aspect-[5/6] md:aspect-[5/6]",
+                "aspect-[2/3] md:aspect-[2/3]",
+              ];
+              const imageAspectClass = aspectPattern[index % 4];
+              return (
               <div key={index} className="space-y-6">
-                {/* 1. IMAGEN */}
-                <div className="group relative aspect-[4/3] overflow-hidden rounded-2xl bg-muted">
+                <div className={`group relative w-full ${imageAspectClass} overflow-hidden rounded-2xl bg-muted`}>
                   <Image
                     src={project.img}
                     alt={project.name}
@@ -61,15 +68,13 @@ export default function PortfolioSection() {
                   </div>
                 </div>
                 
-                {/* 2. TEXTO DESCRIPTIVO */}
                 <div className="space-y-3">
-                  <h3 className="text-xl font-bold">{project.name}</h3>
+                 <h3 className="migra-xl text-xl">{project.name}</h3>
                   <p className="text-muted-foreground leading-relaxed">
                     {project.description}
                   </p>
                 </div>
                 
-                {/* 3. BADGES DE SERVICIOS */}
                 <div className="flex flex-wrap gap-2">
                   {project.services.map((service, serviceIndex) => (
                     <span
@@ -82,7 +87,6 @@ export default function PortfolioSection() {
                   ))}
                 </div>
                 
-                {/* 4. BOTÓN VISITAR SITIO */}
                 <div className="pt-2">
                   <Link
                     href={project.url}
@@ -102,7 +106,7 @@ export default function PortfolioSection() {
                   </Link>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         </InView>
 

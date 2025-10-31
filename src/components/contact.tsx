@@ -1,21 +1,19 @@
 "use client";
-import { Mail, MapPin } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Mail, MapPin, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-
-import { Card } from "@/components/ui/card";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function FeaturesSection() {
+  const [serviceValue, setServiceValue] = useState("");
   return (
-    <section id="contact" className="py-16 md:py-32 bg-muted/30">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="grid items-start gap-12 lg:grid-cols-5 lg:gap-16">
-          {/* Información de contacto - 40% */}
-          <div className="lg:col-span-2 lg:pt-6">
-            <h2 className="text-4xl font-semibold lg:text-5xl mb-6">
+    <section id="contact" className="pt-16 pb-12 md:pt-32 md:pb-20 overflow-x-hidden">
+      <div className="mx-auto max-w-6xl pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] md:px-6 lg:px-8 overflow-x-hidden">
+        <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+          {/* Información de contacto - 50% */}
+          <div>
+            <h2 className="migra-xl text-4xl lg:text-5xl mb-6">
                 Hablemos de tu proyecto
               </h2>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
@@ -25,13 +23,13 @@ export default function FeaturesSection() {
             </p>
             <ul className="space-y-6 text-muted-foreground">
               <li>
-                <Link href="#link" className="hover:text-foreground transition-colors flex items-center gap-3">
+                <Link href="#link" className="hover:text-foreground transition-colors flex items-center gap-3 cursor-pointer">
                   <Mail className="size-5" />
                   <span>contacto@estudiomud.com</span>
                 </Link>
               </li>
               <li>
-                <Link href="#link" className="hover:text-foreground transition-colors flex items-center gap-3">
+                <Link href="#link" className="hover:text-foreground transition-colors flex items-center gap-3 cursor-pointer">
                   <MapPin className="size-5" />
                   <span>Vitacura, Santiago</span>
                 </Link>
@@ -39,184 +37,188 @@ export default function FeaturesSection() {
             </ul>
           </div>
 
-          {/* Formulario - 60% */}
-          <div className="lg:col-span-3">
-            <Card className="p-6 shadow-md sm:p-8">
+          {/* Formulario - 50% - Minimalista sin Card */}
+          <div className="overflow-x-hidden">
+            <form
+              action="https://formspree.io/f/mjkepqyo"
+              method="POST"
+              className="space-y-6 w-full"
+              onSubmit={(e) => {
+                const formData = new FormData(e.currentTarget);
+                const name = formData.get('name');
+                const params = new URLSearchParams();
+                params.set('success', 'true');
+                if (name) {
+                  params.set('name', name.toString());
+                }
+                const nextUrl = `${window.location.origin}/gracias?${params.toString()}`;
+                const hiddenInput = e.currentTarget.querySelector('input[name="_next"]') as HTMLInputElement;
 
-                <form
-                  action="https://formspree.io/f/mjkepqyo"
-                  method="POST"
-                  className="**:[&>label]:block mt-6 space-y-6 *:space-y-3"
-                  onSubmit={(e) => {
-                    const formData = new FormData(e.currentTarget);
-                    const name = formData.get('name');
-                    const params = new URLSearchParams();
-                    params.set('success', 'true');
-                    if (name) {
-                      params.set('name', name.toString());
-                    }
-                    const nextUrl = `${window.location.origin}/gracias?${params.toString()}`;
-                    const hiddenInput = e.currentTarget.querySelector('input[name="_next"]') as HTMLInputElement;
+                if (hiddenInput) {
+                  hiddenInput.value = nextUrl;
+                }
+              }}
+            >
+              <input type="hidden" name="_next" value={`${typeof window !== 'undefined' ? window.location.origin : ''}/gracias`} />
 
-                    if (hiddenInput) {
-                      hiddenInput.value = nextUrl;
+              {/* Nombre */}
+              <div className="relative">
+                <Input 
+                  type="text" 
+                  id="name" 
+                  name="name" 
+                  required 
+                  pattern="[A-Za-z\s]+"
+                  title="Solo se permiten letras y espacios"
+                  placeholder="Nombre"
+                  className="border-0 rounded-none focus-visible:ring-0 shadow-none bg-transparent placeholder:text-foreground/70 py-3 px-0 !text-base"
+                  style={{
+                    backgroundImage: 'radial-gradient(circle, rgb(0 0 0 / 0.2) 0.5px, transparent 0.5px)',
+                    backgroundSize: '3px 1px',
+                    backgroundPosition: '0 bottom',
+                    backgroundRepeat: 'repeat-x',
+                    paddingBottom: '12px'
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.backgroundImage = 'radial-gradient(circle, rgb(0 0 0 / 0.4) 0.5px, transparent 0.5px)';
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.backgroundImage = 'radial-gradient(circle, rgb(0 0 0 / 0.2) 0.5px, transparent 0.5px)';
+                  }}
+                  onInvalid={(e) => {
+                    const target = e.target as HTMLInputElement;
+                    if (target.validity.valueMissing) {
+                      target.setCustomValidity('Por favor ingresa tu nombre');
+                    } else if (target.validity.patternMismatch) {
+                      target.setCustomValidity('Solo se permiten letras y espacios');
                     }
                   }}
+                  onInput={(e) => {
+                    const target = e.target as HTMLInputElement;
+                    target.setCustomValidity('');
+                  }}
+                />
+              </div>
+
+              <div className="relative">
+                <Input 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  required 
+                  placeholder="Email"
+                  className="border-0 rounded-none focus-visible:ring-0 shadow-none bg-transparent placeholder:text-foreground/70 py-3 px-0 !text-base"
+                  style={{
+                    backgroundImage: 'radial-gradient(circle, rgb(0 0 0 / 0.2) 0.5px, transparent 0.5px)',
+                    backgroundSize: '3px 1px',
+                    backgroundPosition: '0 bottom',
+                    backgroundRepeat: 'repeat-x',
+                    paddingBottom: '12px'
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.backgroundImage = 'radial-gradient(circle, rgb(0 0 0 / 0.4) 0.5px, transparent 0.5px)';
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.backgroundImage = 'radial-gradient(circle, rgb(0 0 0 / 0.2) 0.5px, transparent 0.5px)';
+                  }}
+                  onInvalid={(e) => {
+                    const target = e.target as HTMLInputElement;
+                    if (target.validity.valueMissing) {
+                      target.setCustomValidity('Por favor ingresa tu email');
+                    } else if (target.validity.typeMismatch) {
+                      target.setCustomValidity('Por favor ingresa un email válido');
+                    }
+                  }}
+                  onInput={(e) => {
+                    const target = e.target as HTMLInputElement;
+                    target.setCustomValidity('');
+                  }}
+                />
+              </div>
+
+              {/* Proyecto - Select Nativo */}
+              <div className="relative">
+                <select
+                  id="service"
+                  name="service"
+                  value={serviceValue}
+                  onChange={(e) => setServiceValue(e.target.value)}
+                  required
+                  className="w-full border-0 rounded-none focus:ring-0 focus:outline-none focus-visible:ring-0 shadow-none bg-transparent py-3 px-0 !text-base appearance-none cursor-pointer"
+                  style={{
+                    backgroundImage: 'radial-gradient(circle, rgb(0 0 0 / 0.2) 0.5px, transparent 0.5px)',
+                    backgroundSize: '3px 1px',
+                    backgroundPosition: '0 bottom',
+                    backgroundRepeat: 'repeat-x',
+                    paddingBottom: '12px',
+                    paddingRight: '1.5rem'
+                  }}
                 >
-                  <input type="hidden" name="_next" value={`${typeof window !== 'undefined' ? window.location.origin : ''}/gracias`} />
+                  <option value="" disabled>Selecciona un tipo de proyecto</option>
+                  <option value="E-commerce">E-commerce</option>
+                  <option value="Landing page o sitio web">Landing page o sitio web</option>
+                  <option value="Rediseño o mejora de tu web actual">Rediseño o mejora de tu web actual</option>
+                  <option value="Integraciones y automatizaciones">Integraciones y automatizaciones</option>
+                  <option value="Email Marketing">Email Marketing</option>
+                  <option value="Otro">Otro</option>
+                </select>
+                <div className="absolute right-0 bottom-3 pointer-events-none">
+                  <svg className="w-4 h-4 text-foreground/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
 
-                    {/* Nombre y Email en 50/50 */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="name" className="mb-2">Nombre</Label>
-                    <Input 
-                      type="text" 
-                      id="name" 
-                      name="name" 
-                      required 
-                      pattern="[A-Za-z\s]+"
-                      title="Solo se permiten letras y espacios"
-                          onInvalid={(e) => {
-                            const target = e.target as HTMLInputElement;
-                            if (target.validity.valueMissing) {
-                              target.setCustomValidity('Por favor ingresa tu nombre');
-                            } else if (target.validity.patternMismatch) {
-                              target.setCustomValidity('Solo se permiten letras y espacios');
-                            }
-                          }}
-                          onInput={(e) => {
-                            const target = e.target as HTMLInputElement;
-                            target.setCustomValidity('');
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="email" className="mb-2">Email</Label>
-                        <Input 
-                          type="email" 
-                          id="email" 
-                          name="email" 
-                          required 
-                          onInvalid={(e) => {
-                            const target = e.target as HTMLInputElement;
-                            if (target.validity.valueMissing) {
-                              target.setCustomValidity('Por favor ingresa tu email');
-                            } else if (target.validity.typeMismatch) {
-                              target.setCustomValidity('Por favor ingresa un email válido');
-                            }
-                          }}
-                          onInput={(e) => {
-                            const target = e.target as HTMLInputElement;
-                            target.setCustomValidity('');
-                          }}
-                        />
-                      </div>
-                    </div>
+              {/* Mensaje */}
+              <div className="relative">
+                <Textarea 
+                  id="msg" 
+                  name="message" 
+                  rows={4} 
+                  required 
+                  placeholder="Mensaje"
+                  className="border-0 rounded-none focus-visible:ring-0 shadow-none bg-transparent resize-none placeholder:text-foreground/70 py-3 px-0 min-h-[100px] !text-base"
+                  style={{
+                    backgroundImage: 'radial-gradient(circle, rgb(0 0 0 / 0.2) 0.5px, transparent 0.5px)',
+                    backgroundSize: '3px 1px',
+                    backgroundPosition: '0 bottom',
+                    backgroundRepeat: 'repeat-x',
+                    paddingBottom: '12px'
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.backgroundImage = 'radial-gradient(circle, rgb(0 0 0 / 0.4) 0.5px, transparent 0.5px)';
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.backgroundImage = 'radial-gradient(circle, rgb(0 0 0 / 0.2) 0.5px, transparent 0.5px)';
+                  }}
+                  onInvalid={(e) => {
+                    const target = e.target as HTMLTextAreaElement;
+                    if (target.validity.valueMissing) {
+                      target.setCustomValidity('Por favor ingresa tu mensaje');
+                    }
+                  }}
+                  onInput={(e) => {
+                    const target = e.target as HTMLTextAreaElement;
+                    target.setCustomValidity('');
+                  }}
+                />
+              </div>
 
-                    {/* Instagram o sitio actual */}
-                    <div>
-                      <Label htmlFor="instagram" className="mb-2">Instagram o sitio actual (opcional)</Label>
-                      <Input 
-                        type="text" 
-                        id="instagram" 
-                        name="instagram" 
-                        placeholder="@tuempresa o www.tusitio.cl"
-                      />
-                    </div>
-
-
-                  <div>
-                    <Label htmlFor="service">¿Qué tipo de proyecto necesitas?</Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-3">
-                      <div className="space-y-4">
-                        <label className="flex items-center space-x-3 cursor-pointer">
-                          <input 
-                            type="radio" 
-                            name="service" 
-                            value="E-commerce" 
-                            className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
-                            required
-                          />
-                          <span className="text-sm">E-commerce</span>
-                        </label>
-                        <label className="flex items-center space-x-3 cursor-pointer">
-                          <input 
-                            type="radio" 
-                            name="service" 
-                            value="Landing page o sitio web" 
-                            className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
-                          />
-                          <span className="text-sm">Landing page o sitio web</span>
-                        </label>
-                        <label className="flex items-center space-x-3 cursor-pointer">
-                          <input 
-                            type="radio" 
-                            name="service" 
-                            value="Rediseño o mejora de tu web actual" 
-                            className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
-                          />
-                          <span className="text-sm">Rediseño o mejora de tu web actual</span>
-                        </label>
-                      </div>
-                      <div className="space-y-4">
-                        <label className="flex items-center space-x-3 cursor-pointer">
-                          <input 
-                            type="radio" 
-                            name="service" 
-                            value="Integraciones y automatizaciones" 
-                            className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
-                          />
-                          <span className="text-sm">Integraciones y automatizaciones</span>
-                        </label>
-                        <label className="flex items-center space-x-3 cursor-pointer">
-                          <input 
-                            type="radio" 
-                            name="service" 
-                            value="Email Marketing" 
-                            className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
-                          />
-                          <span className="text-sm">Email Marketing</span>
-                        </label>
-                        <label className="flex items-center space-x-3 cursor-pointer">
-                          <input 
-                            type="radio" 
-                            name="service" 
-                            value="Otro" 
-                            className="w-4 h-4 text-primary border-gray-300 focus:ring-primary"
-                          />
-                          <span className="text-sm">Otro</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Plazo estimado eliminado */}
-
-
-                  <div>
-                    <Label htmlFor="msg" className="mb-2">Mensaje</Label>
-                    <Textarea 
-                      id="msg" 
-                      name="message" 
-                      rows={3} 
-                      required 
-                      placeholder="Cuéntanos brevemente tu proyecto"
-                      onInvalid={(e) => {
-                        const target = e.target as HTMLTextAreaElement;
-                        if (target.validity.valueMissing) {
-                          target.setCustomValidity('Por favor ingresa tu mensaje');
-                        }
-                      }}
-                      onInput={(e) => {
-                        const target = e.target as HTMLTextAreaElement;
-                        target.setCustomValidity('');
-                      }}
-                    />
-                  </div>
-
-                  <Button type="submit" className="w-full mt-2">Enviar</Button>
-                </form>
-              </Card>
+              <button 
+                type="submit" 
+                className="flex items-center gap-2 !text-base font-normal text-foreground/80 hover:text-foreground transition-colors duration-200 mt-6 py-3 relative w-fit md:ml-auto group"
+                style={{
+                  backgroundImage: 'radial-gradient(circle, rgb(0 0 0 / 0.2) 0.5px, transparent 0.5px)',
+                  backgroundSize: '3px 1px',
+                  backgroundPosition: '0 bottom',
+                  backgroundRepeat: 'repeat-x',
+                  paddingBottom: '12px'
+                }}
+              >
+                Enviar
+                <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" />
+              </button>
+            </form>
           </div>
         </div>
       </div>

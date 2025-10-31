@@ -52,24 +52,24 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --background: #FCFCFA;
+  --foreground: #181818;
+  --card: #FCFCFA;
+  --card-foreground: #181818;
+  --popover: #FCFCFA;
+  --popover-foreground: #181818;
+  --primary: #181818;
+  --primary-foreground: #FCFCFA;
+  --secondary: #EFEFEA;
+  --secondary-foreground: #181818;
+  --muted: #EFEFEA;
+  --muted-foreground: #5A5A5A;
+  --accent: #EFEFEA;
+  --accent-foreground: #181818;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: #E6E6E0;
+  --input: #E6E6E0;
+  --ring: #9A9A96;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -137,6 +137,17 @@
   font-display: swap;
 }
 
+/* PP Migra ExtraLight for headers */
+@font-face {
+  font-family: 'Migra';
+  src: url('/Fonts/Migra/Migra-Extralight.woff2') format('woff2'),
+       url('/Fonts/Migra/Migra-Extralight.woff') format('woff'),
+       url('/Fonts/Migra/Migra-Extralight.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Suisse International para headers */
 @font-face {
   font-family: 'Suisse International';
@@ -178,14 +189,27 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
   body {
     @apply bg-background text-foreground;
   }
   
+  /* Migra ExtraLight helper for headings */
+  .migra-xl {
+    font-family: 'Migra', serif;
+    font-weight: 100;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
   /* Suisse International para headers */
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Suisse International', sans-serif;
-    font-weight: 400;
+    font-family: 'Migra', serif;
+    font-weight: 200;
   }
   
   /* Neue Montreal para body text */

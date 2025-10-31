@@ -11,8 +11,4 @@ export const NAV_LINKS = [
     name: "Servicios",
     href: "#services",
   },
-  {
-    name: "Clientes",
-    href: "#testimonials",
-  },
 ];

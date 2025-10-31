@@ -12,7 +12,7 @@ function GraciasContent() {
   const success = searchParams.get('success');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background flex items-center justify-center px-6">
+    <div className="min-h-screen bg-background flex items-center justify-center px-6">
       <div className="max-w-2xl mx-auto text-center">
 
         {/* Main Content */}
@@ -26,7 +26,7 @@ function GraciasContent() {
 
           {/* Title */}
           <div className="space-y-4">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground">
+            <h1 className="migra-xl text-4xl md:text-5xl text-foreground">
               {name ? `Gracias, ${name}!` : 'Gracias!'}
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-lg mx-auto">
@@ -52,7 +52,7 @@ function GraciasContent() {
 export default function GraciasPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="text-6xl mb-4">⏳</div>
           <p className="text-muted-foreground">Cargando...</p>

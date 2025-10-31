@@ -10,6 +10,8 @@ import { NAV_LINKS } from "@/content/nav";
 export const HeroHeader = () => {
   const [menuState, setMenuState] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
+  const [isVisible, setIsVisible] = React.useState(true);
+  const lastScrollY = React.useRef(typeof window !== 'undefined' ? window.scrollY : 0);
   const inactivityTimerRef = React.useRef<NodeJS.Timeout | null>(null);
 
   // Función para cerrar menú al hacer click en un link
@@ -47,13 +49,55 @@ export const HeroHeader = () => {
     resetInactivityTimer();
   }, [resetInactivityTimer]);
 
+  // Manejar scroll y cambio de estilo
   React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    let ticking = false;
+    
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          
+          // Cambio de estilo al scroll
+          setIsScrolled(currentScrollY > 50);
+          
+          // No ocultar si el menú está abierto
+          if (menuState) {
+            setIsVisible(true);
+            lastScrollY.current = currentScrollY;
+            ticking = false;
+            return;
+          }
+          
+          // Siempre visible en el top
+          if (currentScrollY < 10) {
+            setIsVisible(true);
+          } 
+          // Scroll hacia abajo - ocultar
+          else if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+            setIsVisible(false);
+          } 
+          // Scroll hacia arriba - mostrar
+          else if (currentScrollY < lastScrollY.current) {
+            setIsVisible(true);
+          }
+          
+          lastScrollY.current = currentScrollY;
+          ticking = false;
+        });
+        
+        ticking = true;
+      }
     };
-    window.addEventListener("scroll", handleScroll);
+    
+    // Inicializar
+    lastScrollY.current = window.scrollY;
+    
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [menuState]);
 
   // Manejar tecla Escape, prevenir scroll y auto-cerrar por inactividad
   React.useEffect(() => {
@@ -96,24 +140,25 @@ export const HeroHeader = () => {
   }, [menuState, handleUserActivity, resetInactivityTimer]);
   return (
     <header>
-      {/* Overlay transparente para cerrar el menú */}
-      {menuState && (
-        <div
-          className="fixed inset-0 z-10 bg-black/20 backdrop-blur-sm lg:hidden transition-opacity duration-300"
-          onClick={handleOverlayClick}
-          aria-hidden="true"
-        />
-      )}
       
       <nav
         data-state={menuState && "active"}
-        className="fixed z-20 w-full px-2"
+        style={{
+          transform: isVisible || menuState ? 'translateY(0)' : 'translateY(-100%)',
+          opacity: isVisible || menuState ? 1 : 0,
+          pointerEvents: isVisible || menuState ? 'auto' : 'none',
+          transition: 'transform 0.3s ease-in-out, opacity 0.3s ease-in-out',
+        }}
+        className={cn(
+          "fixed w-full px-2",
+          menuState ? "z-[60]" : "z-20"
+        )}
       >
         <div
           className={cn(
             "mx-auto mt-2 max-w-6xl px-6 transition-all duration-300 lg:px-12",
             isScrolled &&
-              "bg-background/50 max-w-4xl rounded-2xl border backdrop-blur-lg lg:px-5"
+              "bg-background/50 max-w-4xl rounded-md border backdrop-blur-lg lg:px-5"
           )}
         >
           <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
@@ -135,28 +180,30 @@ export const HeroHeader = () => {
                 aria-controls="mobile-menu"
                 className="relative z-20 -m-2.5 -mr-4 block cursor-pointer p-2.5 lg:hidden transition-all duration-300 ease-in-out"
               >
-                <Menu className={cn(
-                  "m-auto size-6 transition-all duration-300 ease-in-out",
-                  menuState 
-                    ? "rotate-180 scale-0 opacity-0" 
-                    : "rotate-0 scale-100 opacity-100"
-                )} />
-                <X className={cn(
-                  "absolute inset-0 m-auto size-6 transition-all duration-300 ease-in-out",
-                  menuState 
-                    ? "rotate-0 scale-100 opacity-100" 
-                    : "-rotate-180 scale-0 opacity-0"
-                )} />
+                <div className="relative size-6">
+                  <Menu className={cn(
+                    "absolute inset-0 m-auto size-6 transition-all duration-300 ease-in-out",
+                    menuState 
+                      ? "rotate-180 scale-0 opacity-0" 
+                      : "rotate-0 scale-100 opacity-100"
+                  )} />
+                  <X className={cn(
+                    "absolute inset-0 m-auto size-6 transition-all duration-300 ease-in-out",
+                    menuState 
+                      ? "rotate-0 scale-100 opacity-100" 
+                      : "-rotate-180 scale-0 opacity-0"
+                  )} />
+                </div>
               </button>
             </div>
 
-            <div className="absolute inset-0 m-auto hidden size-fit lg:block">
+            <div className="absolute inset-0 m-auto hidden size-fit lg:flex lg:items-center lg:gap-8">
               <ul className="flex gap-8 text-sm">
                 {NAV_LINKS.map((item, index) => (
                   <li key={index}>
                     <Link
                       href={item.href}
-                      className=" hover:text-accent-foreground block duration-150"
+                      className="hover:text-accent-foreground block duration-150"
                     >
                       <span>{item.name}</span>
                     </Link>
@@ -164,55 +211,62 @@ export const HeroHeader = () => {
                 ))}
               </ul>
             </div>
-
-            <div 
-              id="mobile-menu"
-              className={cn(
-                "bg-background mb-6 w-full flex-wrap items-center justify-start space-y-8 rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent",
-                "lg:flex", // Siempre visible en desktop
-                menuState ? "flex" : "hidden", // Toggle en mobile
-                "transition-all duration-300 ease-in-out" // Transición suave
-              )}
-            >
-              <div className="lg:hidden">
-                <ul className="space-y-6 text-base">
-                  {NAV_LINKS.map((item, index) => (
-                    <li key={index}>
-                      <Link
-                        href={item.href}
-                        onClick={handleLinkClick}
-                        className="text-muted-foreground hover:text-accent-foreground block duration-150"
-                      >
-                        <span>{item.name}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                {/* <Button
-                  asChild
-                  variant="outline"
-                  size="sm"
-                  className={cn(isScrolled && "lg:hidden")}
-                >
-                  <Link href="#">
-                    <span>Login</span>
-                  </Link>
-                </Button> */}
-                <Button
-                  asChild
-                  size="lg"
-                >
-                  <Link href="#contact" onClick={handleLinkClick}>
-                    <span>Contacto</span>
-                  </Link>
-                </Button>
-              </div>
+            
+            <div className="hidden lg:block">
+              <Button
+                asChild
+                size="lg"
+              >
+                <Link href="#contact">
+                  <span>Contacto</span>
+                </Link>
+              </Button>
             </div>
+
+
           </div>
         </div>
       </nav>
+      
+      {/* Menú móvil full-screen - estilo editorial */}
+      <div 
+        className={cn(
+          "fixed inset-0 z-50 bg-background lg:hidden",
+          "flex flex-col justify-start items-start px-8 md:px-12 pt-36 md:pt-44",
+          "transition-all duration-500 ease-in-out",
+          menuState 
+            ? "opacity-100 pointer-events-auto" 
+            : "opacity-0 pointer-events-none"
+        )}
+        onClick={handleOverlayClick}
+      >
+        {/* Navegación principal - tipografía grande */}
+        <nav className="w-full">
+          <ul className="space-y-4">
+            {NAV_LINKS.map((item, index) => (
+              <li key={index}>
+                <Link
+                  href={item.href}
+                  onClick={handleLinkClick}
+                  className="migra-xl text-4xl md:text-5xl leading-tight text-foreground hover:opacity-70 transition-opacity duration-200 block"
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+            {/* Contacto como otro título más */}
+            <li>
+              <Link
+                href="#contact"
+                onClick={handleLinkClick}
+                className="migra-xl text-4xl md:text-5xl leading-tight text-foreground hover:opacity-70 transition-opacity duration-200 block"
+              >
+                Contacto
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
   );
 };

@@ -1,36 +1,18 @@
 import HeroSection from "@/components/sections/home/hero-section";
-import CredibilityBar from "@/components/sections/home/credibility-bar";
 import PortfolioSection from "@/components/sections/home/portfolio-section";
 import FeaturesSection from "@/components/sections/home/features-section";
 import ServicesPillars from "@/components/sections/home/services-pillars";
-import FinalCTA from "@/components/sections/home/final-cta";
 import ContactSection from "@/components/contact";
 import FooterSection from "@/components/footer";
 
 export default function FullVersionSection() {
   return (
     <>
-      {/* 1. HERO SECTION - Headline de resultado + CTA principal + WhatsApp */}
       <HeroSection />
-      
-      {/* 2. BARRA DE CREDIBILIDAD - 10 segundos de carga cognitiva */}
-      <CredibilityBar />
-      
-      {/* 3. PORTFOLIO - La prueba visual con resultados */}
       <PortfolioSection />
-      
-      {/* 4. FEATURES - Todo lo que incluye tu proyecto */}
       <FeaturesSection />
-      
-      {/* 5. SERVICIOS PILARES - Diseño, E-commerce, Experiencia */}
       <ServicesPillars />
-      
-      {/* 6. CTA FINAL - Con micro-urgencia sutil */}
-      <FinalCTA />
-      
-      {/* 7. FORMULARIO DE CONTACTO */}
       <ContactSection />
-      
       <FooterSection />
     </>
   );

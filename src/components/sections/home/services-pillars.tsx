@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { InView } from "@/components/motion-primitives/in-view";
 
 const SERVICES = [
   {
@@ -41,144 +40,112 @@ const SERVICES = [
   }
 ];
 
-function AccordionItem({ feature, isOpen, onToggle }: { feature: string; isOpen: boolean; onToggle: () => void }) {
-  return (
-    <div className="border-b border-border/20 group hover:border-border transition-colors duration-200">
-      <button
-        onClick={onToggle}
-        className="flex w-full items-center text-left py-4 transition-colors hover:text-foreground/80 cursor-pointer"
-      >
-        <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mr-4 transition-colors duration-200 ${
-          isOpen ? 'bg-[#C3FB88]' : 'bg-muted group-hover:bg-[#C3FB88]'
-        }`}>
-          <svg
-            className={`w-4 h-4 transition-transform duration-500 ease-in-out ${
-              isOpen ? 'rotate-45 text-foreground' : 'text-muted-foreground group-hover:text-foreground'
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-          </svg>
-        </div>
-        <span className="text-base font-medium">{feature}</span>
-      </button>
-      
-      <div 
-        className={`overflow-hidden transition-all duration-600 ease-in-out ${
-          isOpen ? 'max-h-32' : 'max-h-0'
-        }`}
-        style={{
-          transformOrigin: 'top'
-        }}
-      >
-        <div className="pb-2">
-          <div className="text-sm text-muted-foreground px-10">
-            <p>Descripción detallada del servicio {feature.toLowerCase()}...</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+export default function ServicesPillars() {
+  const [openIndex, setOpenIndex] = useState<number>(0); // Primero abierto por defecto
 
-function ServiceBlock({ service, index }: { service: typeof SERVICES[0]; index: number }) {
-  const [openItems, setOpenItems] = useState<number[]>([]);
-
-  const toggleItem = (featureIndex: number) => {
-    setOpenItems(prev => 
-      prev.includes(featureIndex) 
-        ? prev.filter(i => i !== featureIndex)
-        : [...prev, featureIndex]
-    );
+  const toggleService = (index: number) => {
+    if (openIndex === index) {
+      setOpenIndex(-1); // Cerrar si está abierto
+    } else {
+      setOpenIndex(index); // Abrir y cerrar el anterior
+    }
   };
 
   return (
-    <div className={`sticky top-16 bg-background ${index > 0 ? 'shadow-[0_-2px_4px_-1px_rgba(0,0,0,0.04)]' : ''}`}>
-      <InView
-        variants={{
-          hidden: { opacity: 0, y: 100 },
-          visible: { 
-            opacity: 1, 
-            y: 0,
-            transition: { 
-              duration: 1.2, 
-              ease: "easeOut"
-            }
-          },
-        }}
-        viewOptions={{ margin: "0px 0px -200px 0px" }}
-      >
-        <div className="w-full py-16 md:py-20">
-          <div className="mx-auto max-w-6xl px-6">
-            {/* Header integrado */}
-            {index === 0 && (
-              <div className="text-center mb-16">
-                <InView
-                  variants={{
-                    hidden: { opacity: 0, y: 20 },
-                    visible: { opacity: 1, y: 0 },
-                  }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                  viewOptions={{ margin: "0px 0px -100px 0px" }}
-                >
-                  <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                    Nuestros servicios
-                  </h2>
-                  <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                    Soluciones integrales para transformar tu presencia digital y generar resultados medibles.
-                  </p>
-                </InView>
-              </div>
-            )}
+    <section className="pt-12 pb-8 md:pt-20 md:pb-12">
+      <div className="mx-auto max-w-6xl pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] md:px-6 lg:px-8">
+        <div className="mb-16">
+          <h2 className="migra-xl text-xl leading-tight mb-6">
+            Nuestros servicios
+          </h2>
+        </div>
+
+        <div className="space-y-0">
+          <div className="my-0 h-px" style={{
+            width: '100vw',
+            marginLeft: 'calc(-50vw + 50%)',
+            backgroundImage: 'radial-gradient(circle, rgb(0 0 0 / 0.2) 0.5px, transparent 0.5px)',
+            backgroundSize: '3px 1px',
+            backgroundPosition: '0 center',
+            backgroundRepeat: 'repeat-x'
+          }}></div>
+          
+          {SERVICES.map((service, index) => {
+            const isOpen = openIndex === index;
             
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-              {/* Columna izquierda - Título y descripción */}
-              <div className="space-y-6">
-                <div className="text-sm font-mono tracking-widest text-primary uppercase" style={{ fontFamily: 'Supply Mono, monospace' }}>
-                  {String(index + 1).padStart(2, '0')}/03
-                </div>
-                <h2 className="text-3xl lg:text-4xl font-bold leading-tight">
-                  {service.title}
-                </h2>
-                <p className="text-lg text-muted-foreground leading-relaxed">
-                  {service.description}
-                </p>
-              </div>
-              
-              {/* Columna derecha - Acordeones */}
-              <div className="flex justify-center">
-                <div className="w-full max-w-md">
-                  <div className="space-y-2">
-                    {service.features.map((feature, featureIndex) => (
-                      <AccordionItem
-                        key={feature}
-                        feature={feature}
-                        isOpen={openItems.includes(featureIndex)}
-                        onToggle={() => toggleItem(featureIndex)}
-                      />
-                    ))}
+            return (
+              <div key={service.id}>
+                {index > 0 && (
+                  <div className="my-0 h-px" style={{
+                    width: '100vw',
+                    marginLeft: 'calc(-50vw + 50%)',
+                    backgroundImage: 'radial-gradient(circle, rgb(0 0 0 / 0.2) 0.5px, transparent 0.5px)',
+                    backgroundSize: '3px 1px',
+                    backgroundPosition: '0 center',
+                    backgroundRepeat: 'repeat-x'
+                  }}></div>
+                )}
+                
+                <button
+                  onClick={() => toggleService(index)}
+                  className="w-full text-left py-6 flex items-center gap-4 hover:opacity-80 transition-all duration-200 group cursor-pointer"
+                >
+                  <span className={`text-2xl font-light transition-all duration-500 ease-in-out transform flex-shrink-0 w-8 flex items-center justify-center ${
+                    isOpen ? 'rotate-90 scale-110' : 'rotate-0 scale-100'
+                  } group-hover:rotate-90`}>
+                    {isOpen ? '×' : '+'}
+                  </span>
+                  <h3 className="migra-xl text-4xl md:text-5xl leading-tight transition-opacity duration-200 flex-1">
+                    {service.title}
+                  </h3>
+                </button>
+
+                <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+                }`}>
+                  <div className="pb-8 space-y-6 pt-2 pl-12">
+                    <p className={`text-lg text-muted-foreground leading-relaxed max-w-[36ch] transition-all duration-500 delay-100 ${
+                      isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
+                    }`}>
+                      {service.description}
+                    </p>
+                    
+                    <div className={`mt-8 grid grid-cols-1 md:grid-cols-4 gap-8 transition-all duration-500 delay-200 ${
+                      isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                    }`}>
+                      {service.features.slice(0,4).map((feature, featureIndex) => (
+                        <div 
+                          key={feature} 
+                          className="space-y-2"
+                          style={{
+                            transitionDelay: isOpen ? `${300 + featureIndex * 50}ms` : '0ms'
+                          }}
+                        >
+                          <h4 className="text-sm font-bold tracking-wide uppercase">{feature}</h4>
+                          <p className="text-sm text-muted-foreground">
+                            Descripción detallada del servicio {feature.toLowerCase()}.
+                          </p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
+                
+                {/* Línea punteada abajo del último servicio */}
+                {index === SERVICES.length - 1 && (
+                  <div className="my-0 h-px" style={{
+                    width: '100vw',
+                    marginLeft: 'calc(-50vw + 50%)',
+                    backgroundImage: 'radial-gradient(circle, rgb(0 0 0 / 0.2) 0.5px, transparent 0.5px)',
+                    backgroundSize: '3px 1px',
+                    backgroundPosition: '0 center',
+                    backgroundRepeat: 'repeat-x'
+                  }}></div>
+                )}
               </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
-      </InView>
-    </div>
-  );
-}
-
-export default function ServicesPillars() {
-  return (
-    <section className="bg-muted/30">
-      {/* Secciones sticky que se apilan progresivamente */}
-      <div className="w-full">
-        {SERVICES.map((service, index) => (
-          <ServiceBlock key={service.id} service={service} index={index} />
-        ))}
       </div>
     </section>
   );
