@@ -212,9 +212,9 @@
     font-weight: 200;
   }
   
-  /* Neue Montreal para body text */
-  p, span, div, a, button {
-    font-family: 'Neue Montreal', sans-serif;
+  /* Geist Mono para body text */
+  p {
+    font-family: var(--font-geist-mono), monospace;
   }
   
   /* Estilos para la lista de features */

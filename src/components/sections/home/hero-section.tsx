@@ -34,7 +34,7 @@ export default function HeroSection() {
                 </h1>
               </div>
               <div className="lg:col-span-5 lg:pt-0 xl:pt-0 lg:-mt-[10px] xl:-mt-[12px]">
-                <p className="mt-4 md:mt-6 mx-auto md:mx-0 text-center md:text-left max-w-[36ch] md:max-w-[48ch] text-[16px] md:text-[19px] leading-[1.7] text-muted-foreground">
+                <p className="mt-4 md:mt-6 mx-auto md:mx-0 text-center md:text-left max-w-[36ch] md:max-w-[48ch] text-[16px] md:text-[19px] leading-[1.7] text-muted-foreground font-mono">
                   Creamos sitios webs premium, rápidos y con identidad, diseñados para vender más y diferenciar tu marca.
                 </p>
                 <AnimatedGroup

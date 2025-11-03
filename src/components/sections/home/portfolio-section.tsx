@@ -52,17 +52,15 @@ export default function PortfolioSection() {
           }}
           viewOptions={{ margin: "0px 0px -100px 0px" }}
         >
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-3 md:gap-12">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-12">
             {PORTFOLIO_CONTENT.map((project, index) => {
               const aspectPattern = [
                 "aspect-[2/3] md:aspect-[2/3]",
                 "aspect-[5/6] md:aspect-[5/6]",
                 "aspect-[5/6] md:aspect-[5/6]",
                 "aspect-[2/3] md:aspect-[2/3]",
-                "aspect-[2/3] md:aspect-[2/3]",
-                "aspect-[5/6] md:aspect-[5/6]",
               ];
-              const imageAspectClass = aspectPattern[index % 6];
+              const imageAspectClass = aspectPattern[index % 4];
               return (
               <div key={index} className="space-y-6">
                 <div className={`group relative w-full ${imageAspectClass} overflow-hidden rounded-2xl bg-muted`}>
