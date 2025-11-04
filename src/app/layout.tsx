@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Roboto, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { HeroHeader } from "@/components/header";
 import { ConditionalHeader } from "@/components/conditional-header";
 
 const geistSans = Geist({

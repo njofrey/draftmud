@@ -248,6 +248,7 @@ export const HeroHeader = () => {
               <Button
                 asChild
                 size="lg"
+                className="border border-transparent hover:bg-transparent hover:border-foreground hover:text-foreground transition-all duration-200 ease-in-out"
               >
                 <Link href="#contact">
                   <span>Contacto</span>

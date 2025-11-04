@@ -16,25 +16,11 @@ export default function FeaturesSection() {
             <h2 className="migra-xl text-4xl lg:text-5xl mb-6">
                 Hablemos de tu proyecto
               </h2>
-            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Queremos conocer tu marca.<br />
-              Cuéntanos en qué etapa estás y qué tipo de proyecto te gustaría desarrollar.<br />
-              Te responderemos a la brevedad para coordinar una reunión.
+            <p className="text-sm text-muted-foreground mb-8 leading-relaxed">
+              Queremos conocer tu marca y entender lo que estás buscando. Completa el formulario y te responderemos en menos de 24 horas hábiles.<br />
+              <br />
+              También puedes escribirnos directamente a <a href="mailto:contacto@estudiomud.com" className="text-foreground hover:opacity-70 transition-opacity underline-offset-2 hover:underline">contacto@estudiomud.com</a>
             </p>
-            <ul className="space-y-6 text-muted-foreground">
-              <li>
-                <Link href="#link" className="hover:text-foreground transition-colors flex items-center gap-3 cursor-pointer">
-                  <Mail className="size-5" />
-                  <span>contacto@estudiomud.com</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="#link" className="hover:text-foreground transition-colors flex items-center gap-3 cursor-pointer">
-                  <MapPin className="size-5" />
-                  <span>Vitacura, Santiago</span>
-                </Link>
-              </li>
-            </ul>
           </div>
 
           {/* Formulario - 50% - Minimalista sin Card */}
@@ -155,11 +141,12 @@ export default function FeaturesSection() {
                   }}
                 >
                   <option value="" disabled>Selecciona un tipo de proyecto</option>
-                  <option value="E-commerce">E-commerce</option>
-                  <option value="Landing page o sitio web">Landing page o sitio web</option>
-                  <option value="Rediseño o mejora de tu web actual">Rediseño o mejora de tu web actual</option>
-                  <option value="Integraciones y automatizaciones">Integraciones y automatizaciones</option>
-                  <option value="Email Marketing">Email Marketing</option>
+                  <option value="Branding">Branding</option>
+                  <option value="Diseño web">Diseño web</option>
+                  <option value="E-commerce Shopify">E-commerce Shopify</option>
+                  <option value="Email marketing & CRM">Email marketing & CRM</option>
+                  <option value="Integraciones">Integraciones</option>
+                  <option value="Auditoría">Auditoría</option>
                   <option value="Otro">Otro</option>
                 </select>
                 <div className="absolute right-0 bottom-3 pointer-events-none">

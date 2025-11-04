@@ -7,7 +7,7 @@ import Image from "next/image";
 export default function PortfolioSection() {
   return (
     <section
-    className="pt-12 pb-8 md:pt-20 md:pb-12"
+    className="pt-0 pb-8 md:pb-12"
       id="portfolio"
     >
       <div className="mx-auto max-w-6xl space-y-8 pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] md:px-6 lg:px-8">
@@ -35,8 +35,8 @@ export default function PortfolioSection() {
                    <h2 className="migra-xl text-4xl md:text-5xl mb-6">
                      Portfolio
                    </h2>
-            <p className="text-lg text-muted-foreground max-w-[36ch]">
-              Proyectos que han transformado negocios y generado resultados medibles para nuestros clientes en diferentes industrias.
+            <p className="text-sm text-muted-foreground max-w-[36ch]">
+              Una muestra del tipo de marcas y sitios que hemos desarrollado en los últimos meses
             </p>
           </InView>
         </div>
@@ -63,7 +63,7 @@ export default function PortfolioSection() {
               const imageAspectClass = aspectPattern[index % 4];
               return (
               <div key={index} className="space-y-6">
-                <div className={`group relative w-full ${imageAspectClass} overflow-hidden rounded-2xl bg-muted`}>
+                <div className={`group relative w-full ${imageAspectClass} overflow-hidden rounded-lg bg-muted`}>
                   <Image
                     src={project.img}
                     alt={project.name}
@@ -78,8 +78,7 @@ export default function PortfolioSection() {
                 </div>
                 
                 <div className="space-y-3">
-                 <h3 className="migra-xl text-xl">{project.name}</h3>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     {project.description}
                   </p>
                 </div>

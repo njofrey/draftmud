@@ -28,14 +28,14 @@ export default function HeroSection() {
         <section className="pt-44 pb-12 md:pt-52 md:pb-16 lg:pt-64 lg:pb-20">
           <div className="mx-auto max-w-7xl pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] md:px-6 lg:px-8">
             <div className="grid items-center md:items-start gap-6 md:gap-16 lg:gap-24 lg:grid-cols-12">
-              <div className="lg:col-span-7">
-                <h1 className="migra-xl mt-0 text-center md:text-left text-balance text-[46px] md:text-[66px] xl:text-[80px] leading-[1.02] tracking-[-0.003em]">
-                  Experiencias digitales <br className="hidden lg:block" /> pensadas para crecer.
+              <div className="lg:col-span-6">
+                <h1 className="migra-xl mt-0 text-center lg:text-right text-balance text-[54px] md:text-[74px] xl:text-[90px] leading-[1.02] tracking-[-0.003em]">
+                  Marcas y sitios web,<br />bien hechos.
                 </h1>
               </div>
-              <div className="lg:col-span-5 lg:pt-0 xl:pt-0 lg:-mt-[10px] xl:-mt-[12px]">
-                <p className="mt-4 md:mt-6 mx-auto md:mx-0 text-center md:text-left max-w-[36ch] md:max-w-[48ch] text-[16px] md:text-[19px] leading-[1.7] text-muted-foreground font-mono">
-                  Creamos sitios webs premium, rápidos y con identidad, diseñados para vender más y diferenciar tu marca.
+              <div className="lg:col-span-6 lg:pt-[40px] xl:pt-[50px]">
+                <p className="mt-4 md:mt-6 mx-auto lg:mx-0 text-center lg:text-left max-w-[36ch] md:max-w-[48ch] text-[14px] md:text-[17px] leading-[1.7] text-muted-foreground">
+                  Diseñamos y desarrollamos sitios rápidos, claros y con identidad. Para marcas que valoran el diseño, la ejecución y los resultados reales.
                 </p>
                 <AnimatedGroup
                   variants={{
@@ -49,28 +49,24 @@ export default function HeroSection() {
                     },
                     ...transitionVariants,
                   }}
-                  className="mt-6 md:mt-8 flex flex-col items-center md:items-start justify-start gap-2 md:flex-row"
+                  className="mt-6 md:mt-8 flex flex-col items-center lg:items-start justify-center lg:justify-start gap-2 md:flex-row"
                 >
-                  <div
+                  <Button
                     key={1}
-                    className="rounded-[calc(var(--radius-xl)+0.125rem)] border border-foreground/15 bg-transparent p-0.5"
+                    asChild
+                    size="lg"
+                    variant="ghost"
+                    className="rounded-md px-4 py-2.5 text-[15px] md:px-5 md:py-3 md:text-base cursor-pointer transition-transform duration-200 ease-in-out hover:-translate-y-1"
                   >
-                    <Button
-                      asChild
-                      size="lg"
-                      className="rounded-xl px-4 py-2.5 text-[15px] md:px-5 md:py-3 md:text-base cursor-pointer"
-                    >
-                      <Link href="#portfolio">
-                        <span className="text-nowrap">Ver casos reales</span>
-                      </Link>
-                    </Button>
-                  </div>
+                    <Link href="#portfolio">
+                      <span className="text-nowrap">Ver más</span>
+                    </Link>
+                  </Button>
                   <Button
                     key={2}
                     asChild
                     size="lg"
-                    variant="ghost"
-                    className="h-10.5 rounded-xl px-4 md:px-5 text-[15px] md:text-base cursor-pointer"
+                    className="rounded-md px-4 py-2.5 text-[15px] md:px-5 md:py-3 md:text-base cursor-pointer transition-transform duration-200 ease-in-out hover:-translate-y-1"
                   >
                     <Link href="#contact">
                       <span className="text-nowrap">Hablemos de tu proyecto</span>
