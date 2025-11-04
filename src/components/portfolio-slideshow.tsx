@@ -31,8 +31,49 @@ export default function PortfolioSlideshow({
   const isDraggingRef = useRef(false);
   const isTransitioningRef = useRef(false);
   const mountedRef = useRef(true);
+  const currentXAnimRef = useRef(0);
+  const rafIdRef = useRef<number | null>(null);
+  const widthRef = useRef(1);
+  const lastSampleRef = useRef<{x: number; t: number} | null>(null);
+  const velocityRef = useRef(0);
+  const startXRef = useRef(0);
+  const startYRef = useRef(0);
+  const dragLockedRef = useRef<null | "x" | "y">(null);
   
   const SWIPE_THRESHOLD = 50;
+
+  // Batching con requestAnimationFrame para currentX
+  const scheduleSetCurrentX = useCallback((x: number) => {
+    currentXAnimRef.current = x;
+    if (rafIdRef.current != null) return;
+    rafIdRef.current = requestAnimationFrame(() => {
+      setCurrentX(currentXAnimRef.current);
+      rafIdRef.current = null;
+    });
+  }, []);
+
+  // Muestra velocidad para gestos rápidos
+  const sample = useCallback((x: number) => {
+    const now = performance.now();
+    const last = lastSampleRef.current;
+    if (last) {
+      const dt = Math.max(1, now - last.t);
+      velocityRef.current = (x - last.x) / dt; // px por ms
+    }
+    lastSampleRef.current = { x, t: now };
+  }, []);
+
+  // Cachea el ancho del contenedor
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => {
+      widthRef.current = el.offsetWidth || 1;
+    });
+    widthRef.current = el.offsetWidth || 1;
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   // Proteger contra setState después de unmount
   useEffect(() => {
@@ -141,12 +182,34 @@ export default function PortfolioSlideshow({
     }, 600);
   }, []);
 
+  // Listener touchmove no pasivo, cancela solo cuando corresponde
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const onTouchMove = (e: TouchEvent) => {
+      if (!isDraggingRef.current) return;
+      // cancela el scroll si el gesto es horizontal dominante
+      const touch = e.touches[0];
+      const dx = touch.clientX - startXRef.current;
+      const dy = touch.clientY - startYRef.current;
+      if (Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(dy)) {
+        e.preventDefault();
+      }
+    };
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    return () => el.removeEventListener('touchmove', onTouchMove as any);
+  }, []);
+
   // Touch events
   const handleTouchStart = (e: React.TouchEvent) => {
     const touch = e.touches[0];
     setStartX(touch.clientX);
+    startXRef.current = touch.clientX;
+    startYRef.current = touch.clientY;
+    dragLockedRef.current = null;
     setIsDragging(false);
     setCurrentX(0);
+    lastSampleRef.current = { x: touch.clientX, t: performance.now() };
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -154,15 +217,32 @@ export default function PortfolioSlideshow({
     
     const touch = e.touches[0];
     const deltaX = touch.clientX - startX;
+    const deltaY = touch.clientY - startYRef.current;
+    
+    // Bloqueo horizontal consistente
+    if (dragLockedRef.current == null) {
+      if (Math.abs(deltaX) > 6 || Math.abs(deltaY) > 6) {
+        dragLockedRef.current = Math.abs(deltaX) > Math.abs(deltaY) ? "x" : "y";
+      }
+    }
+    if (dragLockedRef.current === "y") return; // deja scrollear
+    
+    sample(touch.clientX);
     
     if (Math.abs(deltaX) > 5) {
-      e.preventDefault();
       setIsDragging(true);
-      setCurrentX(deltaX);
+      scheduleSetCurrentX(deltaX);
     }
   };
 
   const handleTouchEnd = () => {
+    if (rafIdRef.current != null) {
+      cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = null;
+    }
+    lastSampleRef.current = null;
+    velocityRef.current = 0;
+
     if (!containerRef.current || startX === 0) {
       setStartX(0);
       setIsDragging(false);
@@ -175,10 +255,12 @@ export default function PortfolioSlideshow({
       return;
     }
     
-    const containerWidth = containerRef.current.offsetWidth;
+    const containerWidth = widthRef.current;
     const dragPercent = Math.abs(currentX / containerWidth);
+    const fast = Math.abs(velocityRef.current) > 0.6; // 0.6 px/ms ≈ swipe decidido
+    const shouldSwipe = fast || dragPercent > 0.3 || Math.abs(currentX) > SWIPE_THRESHOLD;
     
-    if (dragPercent > 0.3 || Math.abs(currentX) > SWIPE_THRESHOLD) {
+    if (shouldSwipe) {
       // 1, marca inicio
       setPrevIndex(currentIndexRef.current);
       setIsTransitioning(true);
@@ -231,13 +313,22 @@ export default function PortfolioSlideshow({
       if (!containerRef.current) return;
       const deltaX = e.clientX - startX;
       
+      sample(e.clientX);
+      
       if (Math.abs(deltaX) > 3) {
         setIsDragging(true);
-        setCurrentX(deltaX);
+        scheduleSetCurrentX(deltaX);
       }
     };
 
     const handleMouseUp = () => {
+      if (rafIdRef.current != null) {
+        cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
+      }
+      lastSampleRef.current = null;
+      velocityRef.current = 0;
+
       if (!containerRef.current || startX === 0) {
         setStartX(0);
         setIsDragging(false);
@@ -250,10 +341,12 @@ export default function PortfolioSlideshow({
         return;
       }
       
-      const containerWidth = containerRef.current.offsetWidth;
+      const containerWidth = widthRef.current;
       const dragPercent = Math.abs(currentX / containerWidth);
+      const fast = Math.abs(velocityRef.current) > 0.6; // 0.6 px/ms ≈ swipe decidido
+      const shouldSwipe = fast || dragPercent > 0.3 || Math.abs(currentX) > SWIPE_THRESHOLD;
       
-      if (dragPercent > 0.3 || Math.abs(currentX) > SWIPE_THRESHOLD) {
+      if (shouldSwipe) {
         // 1, marca inicio
         setPrevIndex(currentIndexRef.current);
         setIsTransitioning(true);
@@ -311,8 +404,10 @@ export default function PortfolioSlideshow({
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     setStartX(e.clientX);
+    startXRef.current = e.clientX;
     setIsDragging(false);
     setCurrentX(0);
+    lastSampleRef.current = { x: e.clientX, t: performance.now() };
   };
 
   const handleMouseEnter = () => {};
@@ -321,7 +416,7 @@ export default function PortfolioSlideshow({
   return (
     <div
       ref={containerRef}
-      className={cn("group relative w-full overflow-hidden rounded-lg bg-black select-none touch-none", className)}
+      className={cn("group relative w-full overflow-hidden rounded-lg bg-black select-none touch-pan-y", className)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseDown={handleMouseDown}
@@ -339,7 +434,7 @@ export default function PortfolioSlideshow({
           let position = 0;
           
           if (isDragging && containerRef.current) {
-            const containerWidth = containerRef.current.offsetWidth;
+            const containerWidth = widthRef.current;
             const dragPercent = (currentX / containerWidth) * 100;
             
             if (isActive) {
@@ -353,7 +448,7 @@ export default function PortfolioSlideshow({
             }
           } else if (isSnapping && containerRef.current) {
             // Durante snap back: usar currentX para animar desde posición actual
-            const containerWidth = containerRef.current.offsetWidth;
+            const containerWidth = widthRef.current;
             const dragPercent = (currentX / containerWidth) * 100;
             
             if (isActive) {
