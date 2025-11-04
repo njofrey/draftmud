@@ -1,18 +1,21 @@
 {
-  "name": "lume-studio",
+  "name": "estudio-mud",
   "version": "0.1.0",
-  "description": "A Design agency template built with Next.js.",
+  "description": "Sitio web de Estudio Mud - Estudio digital premium especializado en sitios web y e-commerce de alto rendimiento",
   "keywords": [
-    "kohi studio",
-    "nextjs",
-    "template",
-    "free nextjs template"
+    "estudio mud",
+    "diseño web",
+    "desarrollo web",
+    "e-commerce",
+    "sitios web premium",
+    "chile",
+    "nextjs"
   ],
-  "author": "Kohi Studio",
+  "author": "Estudio Mud",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kohistudio/lume-studio-template"
+    "url": "https://github.com/njofrey/draftmud.git"
   },
   "private": true,
   "scripts": {

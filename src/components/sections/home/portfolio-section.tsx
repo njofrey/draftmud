@@ -38,7 +38,7 @@ export default function PortfolioSection() {
                      Portfolio
                    </h2>
             <p className="text-sm text-muted-foreground max-w-[36ch]">
-              Una muestra del tipo de marcas y sitios que hemos desarrollado en los últimos meses
+              Algunos de los proyectos que hemos desarrollado junto a nuestros clientes en los últimos meses.
             </p>
           </InView>
         </div>
@@ -70,7 +70,7 @@ export default function PortfolioSection() {
               return (
               <div key={index} className="space-y-6 pb-6 md:pb-0">
                 {hasSlideshow ? (
-                  project.name === "Nine9" ? (
+                  project.name === "Nine9" || project.name === "Mudi Matcha" ? (
                     <PortfolioSlideshowEmbla
                       images={images}
                       name={project.name}

@@ -38,16 +38,17 @@ export default function HeroSection() {
   return (
     <>
       <div className="overflow-hidden">
-        <section className="pt-44 pb-12 md:pt-52 md:pb-16 lg:pt-64 lg:pb-20">
-          <div className="mx-auto max-w-7xl safe-container">
-            <div className="grid items-center md:items-start gap-6 md:gap-16 lg:gap-24 lg:grid-cols-12">
-              <div className="lg:col-span-6">
-                <h1 className="migra-xl mt-0 text-center lg:text-right text-balance text-[48px] md:text-[66px] xl:text-[80px] leading-[1.02] tracking-[-0.003em]">
-                  Sitios web bien hechos. Que se sienten bien.
+        <section className="pt-44 pb-12 lg:pt-64 lg:pb-20">
+          <div className="mx-auto max-w-[90rem] px-0 lg:px-8 xl:px-12">
+            <div className="grid items-center gap-6 lg:gap-12 xl:gap-20 lg:grid-cols-[55%_45%] lg:items-start">
+              <div className="lg:col-span-1">
+                <h1 className="migra-xl mt-0 text-center lg:text-right text-[42px] lg:text-[54px] xl:text-[68px] 2xl:text-[80px] leading-[1.05] tracking-[-0.02em] xl:tracking-[-0.01em]">
+                  <span className="block">Ecommerce bien hechos.</span>
+                  <span className="block">Que se sienten bien.</span>
                 </h1>
               </div>
-              <div className="lg:col-span-6 lg:pt-[40px] xl:pt-[50px]">
-                <p className="mt-4 md:mt-6 mx-auto lg:mx-0 text-center lg:text-left max-w-[36ch] md:max-w-[48ch] text-[13px] md:text-[16px] leading-[1.7] text-muted-foreground whitespace-pre-line">
+              <div className="lg:col-span-1">
+                <p className="mt-4 lg:mt-2 lg:pt-1 mx-auto lg:mx-0 text-center lg:text-left max-w-[36ch] lg:max-w-[48ch] text-[13px] lg:text-[16px] leading-[1.7] text-muted-foreground whitespace-pre-line">
                   {/* Opción 1: Directa y técnica (actual) */}
                   Diseñamos y desarrollamos sitios rápidos, claros y con identidad.{"\n"}Para marcas que valoran diseño, ejecución y resultados reales.
                   
@@ -81,14 +82,14 @@ export default function HeroSection() {
                     },
                     ...transitionVariants,
                   }}
-                  className="mt-6 md:mt-8 flex flex-col items-center lg:items-start justify-center lg:justify-start gap-2 md:flex-row"
+                  className="mt-6 lg:mt-8 flex flex-col items-center lg:items-start justify-center lg:justify-start gap-2 lg:flex-row"
                 >
                   <Button
                     key={1}
                     asChild
                     size="lg"
                     variant="ghost"
-                    className="rounded-md px-4 py-2.5 text-[15px] md:px-5 md:py-3 md:text-base cursor-pointer transition-transform duration-200 ease-in-out hover:-translate-y-1"
+                    className="rounded-md px-4 py-2.5 text-[15px] lg:px-5 lg:py-3 lg:text-base cursor-pointer transition-transform duration-200 ease-in-out hover:-translate-y-1"
                   >
                     <Link href="#portfolio" onClick={(e) => handleSmoothScroll(e, "portfolio")}>
                       <span className="text-nowrap">Ver trabajo</span>
@@ -98,7 +99,7 @@ export default function HeroSection() {
                     key={2}
                     asChild
                     size="lg"
-                    className="rounded-md px-4 py-2.5 text-[15px] md:px-5 md:py-3 md:text-base cursor-pointer transition-transform duration-200 ease-in-out hover:-translate-y-1"
+                    className="rounded-md px-4 py-2.5 text-[15px] lg:px-5 lg:py-3 lg:text-base cursor-pointer transition-transform duration-200 ease-in-out hover:-translate-y-1"
                   >
                     <Link href="#contact" onClick={(e) => handleSmoothScroll(e, "contact")}>
                       <span className="text-nowrap">Empecemos</span>
@@ -121,7 +122,7 @@ export default function HeroSection() {
               ...transitionVariants,
             }}
           >
-            <div className="relative mt-20 md:mt-24 overflow-hidden px-2">
+            <div className="relative mt-20 lg:mt-24 overflow-hidden px-2">
               <LogoCloud />
             </div>
           </AnimatedGroup>

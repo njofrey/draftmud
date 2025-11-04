@@ -4,6 +4,7 @@ export const PORTFOLIO_CONTENT = [
     description:
       "Tienda online de matcha japonés con identidad de marca minimalista y enfoque en productos premium.",
     img: "/images/portfolio/web-mudi.jpg",
+    images: ["/images/Mudi/mudi1.jpg", "/images/Mudi/mudi2.jpg", "/images/Mudi/mudi3.jpg"], // Slideshow de 3 imágenes
     url: "#",
     result: "+200% ventas",
     industry: "Alimentación",
