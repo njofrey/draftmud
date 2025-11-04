@@ -18,11 +18,13 @@ export default function PortfolioSlideshow({
   className,
 }: PortfolioSlideshowProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [prevIndex, setPrevIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [offset, setOffset] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [transitionStart, setTransitionStart] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const SWIPE_THRESHOLD = 50;
 
@@ -31,19 +33,40 @@ export default function PortfolioSlideshow({
     if (isPaused || isDragging || isTransitioning || images.length <= 1) return;
 
     const interval = setInterval(() => {
+      setPrevIndex(currentIndex);
       setIsTransitioning(true);
+      setTransitionStart(true); // Marcar inicio de transición
       setCurrentIndex((prev) => (prev + 1) % images.length);
-      setTimeout(() => setIsTransitioning(false), 600);
+      
+      // Pequeño delay para que React renderice la posición inicial
+      setTimeout(() => {
+        setTransitionStart(false); // Iniciar animación
+      }, 10);
+      
+      setTimeout(() => {
+        setIsTransitioning(false);
+        setTransitionStart(false);
+      }, 600);
     }, 5500);
 
     return () => clearInterval(interval);
-  }, [isPaused, isDragging, isTransitioning, images.length]);
+  }, [isPaused, isDragging, isTransitioning, images.length, currentIndex]);
 
   const goToIndex = useCallback((newIndex: number) => {
+    setPrevIndex(currentIndex);
     setIsTransitioning(true);
+    setTransitionStart(true);
     setCurrentIndex(newIndex);
-    setTimeout(() => setIsTransitioning(false), 600);
-  }, []);
+    
+    setTimeout(() => {
+      setTransitionStart(false);
+    }, 10);
+    
+    setTimeout(() => {
+      setIsTransitioning(false);
+      setTransitionStart(false);
+    }, 600);
+  }, [currentIndex]);
 
   const handleNext = useCallback(() => {
     goToIndex((currentIndex + 1) % images.length);
@@ -213,6 +236,18 @@ export default function PortfolioSlideshow({
                 position = baseOffset - ((images.length - diff) * 100);
               }
             }
+          } else if (isTransitioning) {
+            // Durante transición horizontal: nuevo slide entra desde derecha, anterior sale a izquierda
+            if (index === currentIndex) {
+              // Nuevo slide: empieza en 100% (derecha) si es inicio de transición, luego se anima a 0%
+              position = transitionStart ? 100 : 0;
+            } else if (index === prevIndex) {
+              // Slide anterior: empieza en 0% y sale hacia -100% (izquierda)
+              position = transitionStart ? 0 : -100;
+            } else {
+              // Otros slides fuera de vista
+              position = index < currentIndex ? -200 : 200;
+            }
           } else {
             // Posición normal: solo mostrar el slide actual
             if (index === currentIndex) {
@@ -226,7 +261,7 @@ export default function PortfolioSlideshow({
             }
           }
 
-          const isVisible = Math.abs(position) <= 100;
+          const isVisible = Math.abs(position) <= 100 || (isTransitioning && (index === currentIndex || index === prevIndex));
 
           return (
             <div
@@ -235,10 +270,12 @@ export default function PortfolioSlideshow({
               style={{
                 transform: `translateX(${position}%)`,
                 opacity: isVisible ? 1 : 0,
-                zIndex: index === currentIndex ? 10 : isVisible ? 9 : 0,
-                transition: isDragging || isTransitioning
+                zIndex: index === currentIndex ? 10 : (isTransitioning && index === prevIndex) ? 9 : isVisible ? 9 : 0,
+                transition: isDragging
                   ? 'none'
-                  : 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1), opacity 600ms cubic-bezier(0.4, 0, 0.2, 1)',
+                  : isTransitioning && !transitionStart
+                    ? 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1), opacity 600ms cubic-bezier(0.4, 0, 0.2, 1)'
+                    : 'none',
               }}
             >
               <Image
