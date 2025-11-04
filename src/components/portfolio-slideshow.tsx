@@ -82,6 +82,13 @@ export default function PortfolioSlideshow({
     };
   }, []);
 
+  // Limpia el rAF al desmontar
+  useEffect(() => {
+    return () => {
+      if (rafIdRef.current != null) cancelAnimationFrame(rafIdRef.current);
+    };
+  }, []);
+
   // Sincronizar refs con states
   useEffect(() => {
     currentIndexRef.current = currentIndex;
@@ -213,10 +220,10 @@ export default function PortfolioSlideshow({
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (startX === 0) return;
+    if (startXRef.current === 0) return;
     
     const touch = e.touches[0];
-    const deltaX = touch.clientX - startX;
+    const deltaX = touch.clientX - startXRef.current;
     const deltaY = touch.clientY - startYRef.current;
     
     // Bloqueo horizontal consistente
@@ -236,14 +243,13 @@ export default function PortfolioSlideshow({
   };
 
   const handleTouchEnd = () => {
-    if (rafIdRef.current != null) {
-      cancelAnimationFrame(rafIdRef.current);
-      rafIdRef.current = null;
-    }
-    lastSampleRef.current = null;
-    velocityRef.current = 0;
-
-    if (!containerRef.current || startX === 0) {
+    if (!containerRef.current || startXRef.current === 0) {
+      if (rafIdRef.current != null) {
+        cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
+      }
+      lastSampleRef.current = null;
+      velocityRef.current = 0;
       setStartX(0);
       setIsDragging(false);
       setCurrentX(0);
@@ -251,6 +257,12 @@ export default function PortfolioSlideshow({
     }
     
     if (!isDragging) {
+      if (rafIdRef.current != null) {
+        cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
+      }
+      lastSampleRef.current = null;
+      velocityRef.current = 0;
       setStartX(0);
       return;
     }
@@ -259,6 +271,13 @@ export default function PortfolioSlideshow({
     const dragPercent = Math.abs(currentX / containerWidth);
     const fast = Math.abs(velocityRef.current) > 0.6; // 0.6 px/ms ≈ swipe decidido
     const shouldSwipe = fast || dragPercent > 0.3 || Math.abs(currentX) > SWIPE_THRESHOLD;
+    
+    if (rafIdRef.current != null) {
+      cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = null;
+    }
+    lastSampleRef.current = null;
+    velocityRef.current = 0;
     
     if (shouldSwipe) {
       // 1, marca inicio
@@ -307,11 +326,11 @@ export default function PortfolioSlideshow({
 
   // Mouse events
   useEffect(() => {
-    if (startX === 0) return;
+    if (startXRef.current === 0) return;
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!containerRef.current) return;
-      const deltaX = e.clientX - startX;
+      const deltaX = e.clientX - startXRef.current;
       
       sample(e.clientX);
       
@@ -322,14 +341,13 @@ export default function PortfolioSlideshow({
     };
 
     const handleMouseUp = () => {
-      if (rafIdRef.current != null) {
-        cancelAnimationFrame(rafIdRef.current);
-        rafIdRef.current = null;
-      }
-      lastSampleRef.current = null;
-      velocityRef.current = 0;
-
-      if (!containerRef.current || startX === 0) {
+      if (!containerRef.current || startXRef.current === 0) {
+        if (rafIdRef.current != null) {
+          cancelAnimationFrame(rafIdRef.current);
+          rafIdRef.current = null;
+        }
+        lastSampleRef.current = null;
+        velocityRef.current = 0;
         setStartX(0);
         setIsDragging(false);
         setCurrentX(0);
@@ -337,6 +355,12 @@ export default function PortfolioSlideshow({
       }
       
       if (!isDragging) {
+        if (rafIdRef.current != null) {
+          cancelAnimationFrame(rafIdRef.current);
+          rafIdRef.current = null;
+        }
+        lastSampleRef.current = null;
+        velocityRef.current = 0;
         setStartX(0);
         return;
       }
@@ -345,6 +369,13 @@ export default function PortfolioSlideshow({
       const dragPercent = Math.abs(currentX / containerWidth);
       const fast = Math.abs(velocityRef.current) > 0.6; // 0.6 px/ms ≈ swipe decidido
       const shouldSwipe = fast || dragPercent > 0.3 || Math.abs(currentX) > SWIPE_THRESHOLD;
+      
+      if (rafIdRef.current != null) {
+        cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
+      }
+      lastSampleRef.current = null;
+      velocityRef.current = 0;
       
       if (shouldSwipe) {
         // 1, marca inicio
@@ -416,13 +447,14 @@ export default function PortfolioSlideshow({
   return (
     <div
       ref={containerRef}
-      className={cn("group relative w-full overflow-hidden rounded-lg bg-black select-none touch-pan-y", className)}
+      className={cn("group relative w-full overflow-hidden rounded-lg bg-black select-none touch-pan-y overscroll-contain", className)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
       style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
     >
       <div className="relative w-full h-full">
@@ -507,6 +539,7 @@ export default function PortfolioSlideshow({
                 src={img}
                 alt={`${name} - ${index + 1}`}
                 fill
+                sizes="100vw"
                 className="object-cover"
                 priority={isActive || isNext}
                 loading={(isActive || isNext) ? "eager" : "lazy"}
