@@ -39,6 +39,7 @@ export default function PortfolioSlideshow({
   const startXRef = useRef(0);
   const startYRef = useRef(0);
   const dragLockedRef = useRef<null | "x" | "y">(null);
+  const pointerIdRef = useRef<number | null>(null);
   
   const SWIPE_THRESHOLD = 50;
 
@@ -189,52 +190,49 @@ export default function PortfolioSlideshow({
     }, 600);
   }, []);
 
-  // Listener touchmove no pasivo, cancela solo cuando corresponde
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const onTouchMove = (e: TouchEvent) => {
-      if (!isDraggingRef.current) return;
-      // cancela el scroll si el gesto es horizontal dominante
-      const touch = e.touches[0];
-      const dx = touch.clientX - startXRef.current;
-      const dy = touch.clientY - startYRef.current;
-      if (Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(dy)) {
-        e.preventDefault();
-      }
-    };
-    el.addEventListener('touchmove', onTouchMove, { passive: false });
-    return () => el.removeEventListener('touchmove', onTouchMove as any);
+  // Función compartida para limpiar drag
+  const endDrag = useCallback(() => {
+    if (rafIdRef.current != null) {
+      cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = null;
+    }
+    lastSampleRef.current = null;
+    velocityRef.current = 0;
+    setStartX(0);
+    setIsDragging(false);
   }, []);
 
-  // Touch events
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const touch = e.touches[0];
-    setStartX(touch.clientX);
-    startXRef.current = touch.clientX;
-    startYRef.current = touch.clientY;
+  // Pointer Events con captura
+  const handlePointerDown = (e: React.PointerEvent) => {
+    // solo arrastre primario
+    if (e.button !== 0) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    pointerIdRef.current = e.pointerId;
+    setStartX(e.clientX);
+    startXRef.current = e.clientX;
+    startYRef.current = e.clientY;
     dragLockedRef.current = null;
     setIsDragging(false);
     setCurrentX(0);
-    lastSampleRef.current = { x: touch.clientX, t: performance.now() };
+    lastSampleRef.current = { x: e.clientX, t: performance.now() };
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (startXRef.current === 0) return;
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (pointerIdRef.current == null) return;
     
-    const touch = e.touches[0];
-    const deltaX = touch.clientX - startXRef.current;
-    const deltaY = touch.clientY - startYRef.current;
+    const deltaX = e.clientX - startXRef.current;
+    const deltaY = e.clientY - startYRef.current;
     
-    // Bloqueo horizontal consistente
     if (dragLockedRef.current == null) {
       if (Math.abs(deltaX) > 6 || Math.abs(deltaY) > 6) {
         dragLockedRef.current = Math.abs(deltaX) > Math.abs(deltaY) ? "x" : "y";
       }
     }
-    if (dragLockedRef.current === "y") return; // deja scrollear
+    if (dragLockedRef.current === "y") return;
     
-    sample(touch.clientX);
+    // solo cuando hay lock horizontal, evita que iOS intente scroll
+    e.preventDefault();
+    sample(e.clientX);
     
     if (Math.abs(deltaX) > 5) {
       setIsDragging(true);
@@ -242,28 +240,17 @@ export default function PortfolioSlideshow({
     }
   };
 
-  const handleTouchEnd = () => {
+  const handlePointerUp = () => {
+    pointerIdRef.current = null;
+    
     if (!containerRef.current || startXRef.current === 0) {
-      if (rafIdRef.current != null) {
-        cancelAnimationFrame(rafIdRef.current);
-        rafIdRef.current = null;
-      }
-      lastSampleRef.current = null;
-      velocityRef.current = 0;
-      setStartX(0);
-      setIsDragging(false);
+      endDrag();
       setCurrentX(0);
       return;
     }
     
     if (!isDragging) {
-      if (rafIdRef.current != null) {
-        cancelAnimationFrame(rafIdRef.current);
-        rafIdRef.current = null;
-      }
-      lastSampleRef.current = null;
-      velocityRef.current = 0;
-      setStartX(0);
+      endDrag();
       return;
     }
     
@@ -319,126 +306,14 @@ export default function PortfolioSlideshow({
       }, 150); // Delay más largo para efecto natural
     }
     
-    setStartX(0);
-    setIsDragging(false);
-    /* nada que reiniciar */
+    endDrag();
   };
 
-  // Mouse events
-  useEffect(() => {
-    if (startXRef.current === 0) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!containerRef.current) return;
-      const deltaX = e.clientX - startXRef.current;
-      
-      sample(e.clientX);
-      
-      if (Math.abs(deltaX) > 3) {
-        setIsDragging(true);
-        scheduleSetCurrentX(deltaX);
-      }
-    };
-
-    const handleMouseUp = () => {
-      if (!containerRef.current || startXRef.current === 0) {
-        if (rafIdRef.current != null) {
-          cancelAnimationFrame(rafIdRef.current);
-          rafIdRef.current = null;
-        }
-        lastSampleRef.current = null;
-        velocityRef.current = 0;
-        setStartX(0);
-        setIsDragging(false);
-        setCurrentX(0);
-        return;
-      }
-      
-      if (!isDragging) {
-        if (rafIdRef.current != null) {
-          cancelAnimationFrame(rafIdRef.current);
-          rafIdRef.current = null;
-        }
-        lastSampleRef.current = null;
-        velocityRef.current = 0;
-        setStartX(0);
-        return;
-      }
-      
-      const containerWidth = widthRef.current;
-      const dragPercent = Math.abs(currentX / containerWidth);
-      const fast = Math.abs(velocityRef.current) > 0.6; // 0.6 px/ms ≈ swipe decidido
-      const shouldSwipe = fast || dragPercent > 0.3 || Math.abs(currentX) > SWIPE_THRESHOLD;
-      
-      if (rafIdRef.current != null) {
-        cancelAnimationFrame(rafIdRef.current);
-        rafIdRef.current = null;
-      }
-      lastSampleRef.current = null;
-      velocityRef.current = 0;
-      
-      if (shouldSwipe) {
-        // 1, marca inicio
-        setPrevIndex(currentIndexRef.current);
-        setIsTransitioning(true);
-        setTransitionStart(true);
-        // 2, fija el índice destino
-        if (currentX > 0) {
-          setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-        } else {
-          setCurrentIndex((prev) => (prev + 1) % images.length);
-        }
-        // 3, espera un frame para que el DOM pinte la posición inicial
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            // 4, habilita transición y recién aquí resetea currentX para que anime
-            setTransitionStart(false);
-            setCurrentX(0);
-          });
-        });
-        // 5, limpia flags al terminar la animación
-        setTimeout(() => {
-          if (!mountedRef.current) return;
-          setIsTransitioning(false);
-          setTransitionStart(false);
-        }, 600);
-      } else {
-        // Snap back: mantener currentX y animar hacia 0 con efecto suave
-        setIsDragging(false);
-        setIsSnapping(true);
-        // Delay más largo para que se "detenga" en su posición antes de animar
-        setTimeout(() => {
-          if (!mountedRef.current) return;
-          setCurrentX(0); // Esto iniciará la animación hacia 0
-          setTimeout(() => {
-            if (!mountedRef.current) return;
-            setIsSnapping(false);
-          }, 500);
-        }, 150); // Delay más largo para efecto natural
-      }
-      
-      setStartX(0);
-      setIsDragging(false);
-      /* nada que reiniciar */
-    };
-
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startX, isDragging, currentX]);
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setStartX(e.clientX);
-    startXRef.current = e.clientX;
-    setIsDragging(false);
+  const handlePointerCancel = () => {
+    pointerIdRef.current = null;
+    // cancelar como en onTouchCancel
+    endDrag();
     setCurrentX(0);
-    lastSampleRef.current = { x: e.clientX, t: performance.now() };
   };
 
   const handleMouseEnter = () => {};
@@ -447,14 +322,18 @@ export default function PortfolioSlideshow({
   return (
     <div
       ref={containerRef}
-      className={cn("group relative w-full overflow-hidden rounded-lg bg-black select-none touch-pan-y overscroll-contain", className)}
+      className={cn(
+        "group relative w-full overflow-hidden rounded-lg bg-black select-none",
+        "touch-pan-y overscroll-contain",
+        "[-webkit-user-select:none] [user-select:none] [-webkit-tap-highlight-color:transparent]",
+        className
+      )}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onMouseDown={handleMouseDown}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      onTouchCancel={handleTouchEnd}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
       style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
     >
       <div className="relative w-full h-full">
