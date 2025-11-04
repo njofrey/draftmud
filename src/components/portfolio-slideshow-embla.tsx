@@ -21,7 +21,12 @@ export default function PortfolioSlideshowEmbla({
   className,
   heightClass = "h-[56vw] sm:h-[420px] md:h-[520px]",
 }: Props) {
-  const autoplay = useRef(Autoplay({ delay: 5500, stopOnInteraction: false, stopOnMouseEnter: true }));
+  const autoplay = useRef(Autoplay({ 
+    delay: 5500, 
+    stopOnInteraction: false, 
+    stopOnMouseEnter: true,
+    stopOnFocusIn: false, // clave en iOS, evita que taps/bullets frenen el autoplay
+  }));
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
@@ -46,10 +51,33 @@ export default function PortfolioSlideshowEmbla({
     };
   }, [emblaApi]);
 
+  // Reanudar autoplay usando eventos de Embla y reset()
+  useEffect(() => {
+    if (!emblaApi || !autoplay.current) return;
+    const stop  = () => autoplay.current.stop();
+    const play  = () => autoplay.current.play();
+    const reset = () => autoplay.current.reset(); // reinicia el temporizador de forma segura
+    const handleReInit = () => autoplay.current?.play(); // si Embla se re-inicializa, garantiza autoplay
+    emblaApi.on("pointerDown", stop);   // mientras arrastras, pausa
+    emblaApi.on("pointerUp", reset);    // al soltar, reanuda el temporizador
+    emblaApi.on("settle", reset);       // tras terminar la animación, asegura reanudación
+    emblaApi.on("reInit", handleReInit);
+    const onVis = () => { if (!document.hidden) reset(); };
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      emblaApi.off("pointerDown", stop);
+      emblaApi.off("pointerUp", reset);
+      emblaApi.off("settle", reset);
+      emblaApi.off("reInit", handleReInit);
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  }, [emblaApi]);
+
   return (
     <div
       className={cn(
-        "relative w-full overflow-hidden rounded-lg bg-black select-none touch-pan-y overscroll-contain",
+        "group relative w-full overflow-hidden rounded-lg bg-black select-none touch-pan-y overscroll-contain",
+        heightClass, // aplica alto
         className
       )}
     >
@@ -67,12 +95,10 @@ export default function PortfolioSlideshowEmbla({
                   alt={`${name} - ${i + 1}`}
                   fill
                   sizes="100vw"
-                  className={cn(
-                    "object-cover [backface-visibility:hidden] [transform:translateZ(0)] transition-transform duration-700",
-                    isActive ? "scale-[1.015]" : "scale-100" // micro-zoom sutil como antes
-                  )}
+                  className="object-cover [backface-visibility:hidden] [transform:translateZ(0)]"
                   priority={isActive || isNext}
                   loading={isActive || isNext ? "eager" : "lazy"}
+                  decoding="async"
                   draggable={false}
                 />
               </div>
@@ -91,7 +117,12 @@ export default function PortfolioSlideshowEmbla({
           {images.map((_, i) => (
             <button
               key={i}
-              onClick={() => emblaApi?.scrollTo(i)}
+              type="button"
+              tabIndex={-1}
+              onClick={() => {
+                emblaApi?.scrollTo(i);
+                autoplay.current?.reset();
+              }}
               className={cn(
                 "h-1.5 rounded-full transition-all duration-300",
                 i === selected ? "w-6 bg-white" : "w-1.5 bg-white/40 hover:bg-white/60"
@@ -104,16 +135,22 @@ export default function PortfolioSlideshowEmbla({
       {/* Arrows opcionales en desktop */}
       <button
         type="button"
-        onClick={() => emblaApi?.scrollPrev()}
-        className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white"
+        onClick={() => {
+          emblaApi?.scrollPrev();
+          autoplay.current?.reset();
+        }}
+        className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         aria-label="Anterior"
       >
         ‹
       </button>
       <button
         type="button"
-        onClick={() => emblaApi?.scrollNext()}
-        className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white"
+        onClick={() => {
+          emblaApi?.scrollNext();
+          autoplay.current?.reset();
+        }}
+        className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         aria-label="Siguiente"
       >
         ›
