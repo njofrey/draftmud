@@ -10,13 +10,14 @@ export const PORTFOLIO_CONTENT = [
     services: ["Diseño UI/UX", "E-commerce", "Branding", "SEO"]
   },
   {
-    name: "Nine9 Brands",
+    name: "Nine9",
     description:
       "Marketplace multi-marca con arquitectura escalable y sistema de gestión unificado para múltiples tiendas.",
     img: "/images/portfolio/web-nine.jpg",
+    images: ["/images/Nine9/1.jpeg", "/images/Nine9/2.jpeg", "/images/Nine9/3.jpeg"], // Slideshow de 3 imágenes
     url: "#",
     result: "+300% escalabilidad",
-    industry: "Marketplace",
+    industry: "Diseño Web",
     services: ["Arquitectura", "Multi-tienda", "Integraciones", "Analytics"]
   },
   {

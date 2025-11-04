@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { InView } from "@/components/motion-primitives/in-view";
 import Image from "next/image";
+import PortfolioSlideshow from "@/components/portfolio-slideshow";
 
 export default function PortfolioSection() {
   return (
@@ -61,21 +62,34 @@ export default function PortfolioSection() {
                 "aspect-[2/3] md:aspect-[2/3]",
               ];
               const imageAspectClass = aspectPattern[index % 4];
+              // Detectar si tiene slideshow (array de imágenes) o imagen única
+              const hasSlideshow = 'images' in project && Array.isArray((project as any).images);
+              const images = hasSlideshow ? (project as any).images : [project.img];
+
               return (
               <div key={index} className="space-y-6 pb-6 md:pb-0">
-                <div className={`group relative w-full ${imageAspectClass} overflow-hidden rounded-lg bg-muted`}>
-                  <Image
-                    src={project.img}
-                    alt={project.name}
-                    fill
-                    className="object-cover"
+                {hasSlideshow ? (
+                  <PortfolioSlideshow
+                    images={images}
+                    name={project.name}
+                    industry={project.industry}
+                    className={imageAspectClass}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <div className="absolute bottom-4 left-4">
-                    <div className="text-white font-bold text-lg">{project.name}</div>
-                    <div className="text-white/80 text-sm">{project.industry}</div>
+                ) : (
+                  <div className={`group relative w-full ${imageAspectClass} overflow-hidden rounded-lg bg-muted`}>
+                    <Image
+                      src={project.img}
+                      alt={project.name}
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <div className="absolute bottom-4 left-4">
+                      <div className="text-white font-bold text-lg">{project.name}</div>
+                      <div className="text-white/80 text-sm">{project.industry}</div>
+                    </div>
                   </div>
-                </div>
+                )}
                 
                 <div className="space-y-3">
                   <p className="text-sm text-muted-foreground leading-relaxed">
