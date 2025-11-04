@@ -7,7 +7,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-ibm-plex-mono);
   --font-roboto: var(--font-roboto);
   --font-faktum: 'Faktum', sans-serif;
   --font-migra: 'Migra', serif;
@@ -214,7 +214,7 @@
   
   /* Geist Mono para body text */
   p {
-    font-family: var(--font-geist-mono), monospace;
+    font-family: var(--font-ibm-plex-mono), monospace;
   }
   
   /* Estilos para la lista de features */
@@ -239,5 +239,26 @@
   .features-list li svg {
     flex-shrink: 0;
     color: hsl(var(--primary));
+  }
+}
+
+@layer utilities {
+  .safe-container {
+    padding-left: max(1.25rem, env(safe-area-inset-left));
+    padding-right: max(1.25rem, env(safe-area-inset-right));
+  }
+  
+  @media (min-width: 768px) {
+    .safe-container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .safe-container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
   }
 }

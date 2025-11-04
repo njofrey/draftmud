@@ -5,7 +5,7 @@ const SERVICES = [
   {
     id: 1,
     title: "Branding",
-    description: "Identidad que conecta y diferencia. Diseñamos marcas con propósito y coherencia, desde la estrategia hasta el sistema visual. Si estás creando una nueva identidad o renovando la tuya, guiamos todo el proceso para lograr una marca sólida, adaptable y recordable. El resultado: una marca coherente, reconocible y lista para escalar",
+    description: "Identidad que conecta y diferencia.\nDiseñamos marcas con propósito y coherencia, desde la estrategia hasta el sistema visual.Si estás creando una nueva identidad o renovando la tuya, guiamos todo el proceso para lograr una marca sólida, adaptable y recordable.\nEl resultado: una marca coherente, reconocible y lista para escalar",
     features: [
       {
         title: "Estrategia e identidad visual",
@@ -51,7 +51,7 @@ const SERVICES = [
   {
     id: 3,
     title: "E-commerce",
-    description: "Tu tienda online, pensada para crecer. Diseñamos tiendas rápidas, seguras y listas para operar sin fricción. Si ya vendes o vienes de otra plataforma, migramos, optimizamos y escalamos tu e-commerce en Shopify 2.0 sin perder datos ni rendimiento. Cada tienda se optimiza para vender más, mantener estabilidad y escalar sin fricción.",
+    description: "Tu tienda online, pensada para crecer. \nDiseñamos tiendas rápidas, seguras y listas para operar sin fricción. Si ya vendes o vienes de otra plataforma, migramos, optimizamos y escalamos tu e-commerce en Shopify 2.0 sin perder datos ni rendimiento. \nCada tienda se optimiza para vender más, mantener estabilidad y escalar sin fricción.",
     features: [
       {
         title: "Shopify 2.0 y checkout optimizado",
@@ -73,8 +73,8 @@ const SERVICES = [
   },
   {
     id: 4,
-    title: "Email Marketing y CRM",
-    description: "Automatizaciones que conectan, venden y fidelizan. Combinamos diseño, contenido y automatización para aumentar apertura y recompra. Si partes desde cero o ya usas Klaviyo u otra herramienta, activamos flujos que convierten visitas en clientes y clientes en lealtad. El resultado: relaciones más fuertes y clientes que vuelven.",
+    title: "Email Marketing",
+    description: "Automatizaciones que conectan, venden y fidelizan. \nCombinamos diseño, contenido y automatización para aumentar apertura y recompra. Si partes desde cero o ya usas Klaviyo u otra herramienta, activamos flujos que convierten visitas en clientes y clientes en lealtad. \nEl resultado: relaciones más fuertes y clientes que vuelven.",
     features: [
       {
         title: "Flujos automatizados",
@@ -112,8 +112,8 @@ export default function ServicesPillars() {
   };
 
   return (
-    <section className="pt-12 pb-8 md:pt-20 md:pb-12">
-      <div className="mx-auto max-w-6xl pl-[max(1.25rem,env(safe-area-inset-left))] pr-[max(1.25rem,env(safe-area-inset-right))] md:px-6 lg:px-8">
+    <section id="services" className="pt-12 pb-8 md:pt-20 md:pb-12">
+      <div className="mx-auto max-w-6xl safe-container">
         <div className="mb-16">
           <h2 className="text-xl leading-tight mb-6" style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}>
             Nuestros servicios (04)
@@ -163,14 +163,14 @@ export default function ServicesPillars() {
                 <div className={`overflow-hidden transition-all duration-500 ease-in-out ${
                   isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
                 }`}>
-                  <div className="pb-8 space-y-6 pt-2 pl-8 md:pl-12">
-                    <p className={`text-sm text-muted-foreground leading-relaxed max-w-[42ch] transition-all duration-500 delay-100 ${
+                  <div className="pb-8 space-y-6 pt-2 md:pl-12">
+                    <p className={`text-sm text-muted-foreground leading-relaxed lg:max-w-[84ch] transition-all duration-500 delay-100 text-left whitespace-pre-line ${
                       isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
                     }`}>
                       {service.description}
                     </p>
                     
-                    <div className={`mt-12 grid grid-cols-1 md:grid-cols-4 gap-8 transition-all duration-500 delay-200 ${
+                    <div className={`mt-16 md:mt-20 grid grid-cols-1 md:grid-cols-4 gap-8 transition-all duration-500 delay-200 ${
                       isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                     }`}>
                       {service.features.slice(0,4).map((feature, featureIndex) => (

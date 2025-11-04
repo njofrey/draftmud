@@ -3,7 +3,7 @@ import { InfiniteSlider } from "@/components/motion-primitives/infinite-slider";
 export default function LogoCloud() {
   return (
     <section className=" overflow-hidden pt-1 pb-1 md:pt-16 md:pb-6">
-      <div className="group relative m-auto max-w-6xl pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] md:px-6 lg:px-8">
+      <div className="group relative m-auto max-w-6xl safe-container">
         <div className="relative py-1.5 md:py-6">
           <InfiniteSlider speedOnHover={20} speed={40} gap={90}>
               <div className="flex items-center">

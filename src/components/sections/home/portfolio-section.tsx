@@ -10,7 +10,7 @@ export default function PortfolioSection() {
     className="pt-0 pb-8 md:pb-12"
       id="portfolio"
     >
-      <div className="mx-auto max-w-6xl space-y-8 pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] md:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl space-y-8 safe-container">
         <div className="mt-6 mb-8 h-px" style={{
           width: '100vw',
           marginLeft: 'calc(-50vw + 50%)',
@@ -52,7 +52,7 @@ export default function PortfolioSection() {
           }}
           viewOptions={{ margin: "0px 0px -100px 0px" }}
         >
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-12">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-12">
             {PORTFOLIO_CONTENT.map((project, index) => {
               const aspectPattern = [
                 "aspect-[2/3] md:aspect-[2/3]",
@@ -62,7 +62,7 @@ export default function PortfolioSection() {
               ];
               const imageAspectClass = aspectPattern[index % 4];
               return (
-              <div key={index} className="space-y-6">
+              <div key={index} className="space-y-6 pb-6 md:pb-0">
                 <div className={`group relative w-full ${imageAspectClass} overflow-hidden rounded-lg bg-muted`}>
                   <Image
                     src={project.img}
@@ -95,7 +95,7 @@ export default function PortfolioSection() {
                   ))}
                 </div>
                 
-                <div className="pt-2">
+                <div className="pt-2 pb-4 md:pb-0">
                   <Link
                     href={project.url}
                     className="group inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"

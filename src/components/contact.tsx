@@ -8,7 +8,7 @@ import { useState } from "react";
 export default function FeaturesSection() {
   const [serviceValue, setServiceValue] = useState("");
   return (
-    <section id="contact" className="pt-16 pb-12 md:pt-32 md:pb-20 overflow-x-hidden">
+    <section id="contact" className="pt-16 pb-20 md:pt-32 md:pb-32 overflow-x-hidden">
       {/* Separador punteado al inicio */}
       <div className="my-0 h-px mb-8 md:mb-12" style={{
         width: '100vw',
@@ -18,7 +18,7 @@ export default function FeaturesSection() {
         backgroundPosition: '0 center',
         backgroundRepeat: 'repeat-x'
       }}></div>
-      <div className="mx-auto max-w-6xl pl-[max(1.25rem,env(safe-area-inset-left))] pr-[max(1.25rem,env(safe-area-inset-right))] md:px-6 lg:px-8 overflow-x-hidden">
+      <div className="mx-auto max-w-6xl safe-container overflow-x-hidden">
         <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Información de contacto - 50% */}
           <div>

@@ -15,13 +15,37 @@ export const HeroHeader = () => {
   const lastScrollY = React.useRef(typeof window !== 'undefined' ? window.scrollY : 0);
   const inactivityTimerRef = React.useRef<NodeJS.Timeout | null>(null);
 
+  // Función para scroll suave
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault();
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+    // Cerrar menú móvil si está abierto
+    if (menuState) {
+      setIsMenuClosing(true);
+      setMenuState(false);
+      setTimeout(() => {
+        setIsMenuClosing(false);
+      }, 350);
+    }
+  };
+
   // Función para cerrar menú al hacer click en un link
-  const handleLinkClick = () => {
-    setIsMenuClosing(true);
-    setMenuState(false);
-    setTimeout(() => {
-      setIsMenuClosing(false);
-    }, 350);
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId?: string) => {
+    if (targetId) {
+      handleSmoothScroll(e, targetId);
+    } else {
+      setIsMenuClosing(true);
+      setMenuState(false);
+      setTimeout(() => {
+        setIsMenuClosing(false);
+      }, 350);
+    }
   };
 
   // Función para cerrar menú al hacer click en el overlay
@@ -231,16 +255,31 @@ export const HeroHeader = () => {
 
             <div className="absolute inset-0 m-auto hidden size-fit lg:flex lg:items-center lg:gap-8">
               <ul className="flex gap-8 text-sm">
-                {NAV_LINKS.map((item, index) => (
-                  <li key={index}>
-                    <Link
-                      href={item.href}
-                      className="hover:text-accent-foreground block duration-150"
-                    >
-                      <span>{item.name}</span>
-                    </Link>
-                  </li>
-                ))}
+                {NAV_LINKS.map((item, index) => {
+                  const isHashLink = item.href.startsWith('#');
+                  const targetId = isHashLink ? item.href.substring(1) : null;
+                  
+                  return (
+                    <li key={index}>
+                      {isHashLink ? (
+                        <Link
+                          href={item.href}
+                          onClick={(e) => handleSmoothScroll(e, targetId!)}
+                          className="hover:text-accent-foreground block duration-150"
+                        >
+                          <span>{item.name}</span>
+                        </Link>
+                      ) : (
+                        <Link
+                          href={item.href}
+                          className="hover:text-accent-foreground block duration-150"
+                        >
+                          <span>{item.name}</span>
+                        </Link>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
             
@@ -250,7 +289,7 @@ export const HeroHeader = () => {
                 size="lg"
                 className="transition-transform duration-200 ease-in-out hover:-translate-y-1"
               >
-                <Link href="#contact">
+                <Link href="#contact" onClick={(e) => handleSmoothScroll(e, "contact")}>
                   <span>Contacto</span>
                 </Link>
               </Button>
@@ -276,22 +315,27 @@ export const HeroHeader = () => {
         {/* Navegación principal - tipografía grande */}
         <nav className="w-full">
           <ul className="space-y-4">
-            {NAV_LINKS.map((item, index) => (
-              <li key={index}>
-                <Link
-                  href={item.href}
-                  onClick={handleLinkClick}
-                  className="migra-xl text-4xl md:text-5xl leading-tight text-foreground hover:opacity-70 transition-opacity duration-200 block"
-                >
-                  {item.name}
-                </Link>
-              </li>
-            ))}
+            {NAV_LINKS.map((item, index) => {
+              const isHashLink = item.href.startsWith('#');
+              const targetId = isHashLink ? item.href.substring(1) : null;
+              
+              return (
+                <li key={index}>
+                  <Link
+                    href={item.href}
+                    onClick={(e) => handleLinkClick(e, targetId || undefined)}
+                    className="migra-xl text-4xl md:text-5xl leading-tight text-foreground hover:opacity-70 transition-opacity duration-200 block"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              );
+            })}
             {/* Contacto como otro título más */}
             <li>
               <Link
                 href="#contact"
-                onClick={handleLinkClick}
+                onClick={(e) => handleLinkClick(e, "contact")}
                 className="migra-xl text-4xl md:text-5xl leading-tight text-foreground hover:opacity-70 transition-opacity duration-200 block"
               >
                 Contacto
