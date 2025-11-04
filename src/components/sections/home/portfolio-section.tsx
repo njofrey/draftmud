@@ -4,6 +4,7 @@ import Link from "next/link";
 import { InView } from "@/components/motion-primitives/in-view";
 import Image from "next/image";
 import PortfolioSlideshow from "@/components/portfolio-slideshow";
+import PortfolioSlideshowEmbla from "@/components/portfolio-slideshow-embla";
 
 export default function PortfolioSection() {
   return (
@@ -69,12 +70,21 @@ export default function PortfolioSection() {
               return (
               <div key={index} className="space-y-6 pb-6 md:pb-0">
                 {hasSlideshow ? (
-                  <PortfolioSlideshow
-                    images={images}
-                    name={project.name}
-                    industry={project.industry}
-                    className={imageAspectClass}
-                  />
+                  project.name === "TEST" ? (
+                    <PortfolioSlideshowEmbla
+                      images={images}
+                      name={project.name}
+                      industry={project.industry}
+                      className={imageAspectClass}
+                    />
+                  ) : (
+                    <PortfolioSlideshow
+                      images={images}
+                      name={project.name}
+                      industry={project.industry}
+                      className={imageAspectClass}
+                    />
+                  )
                 ) : (
                   <div className={`group relative w-full ${imageAspectClass} overflow-hidden rounded-lg bg-muted`}>
                     <Image

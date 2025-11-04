@@ -21,6 +21,17 @@ export const PORTFOLIO_CONTENT = [
     services: ["Arquitectura", "Multi-tienda", "Integraciones", "Analytics"]
   },
   {
+    name: "TEST",
+    description:
+      "Marketplace multi-marca con arquitectura escalable y sistema de gestión unificado para múltiples tiendas.",
+    img: "/images/portfolio/web-nine.jpg",
+    images: ["/images/Nine9/1.jpeg", "/images/Nine9/2.jpeg", "/images/Nine9/3.jpeg"], // Slideshow de 3 imágenes
+    url: "#",
+    result: "+300% escalabilidad",
+    industry: "Diseño Web",
+    services: ["Arquitectura", "Multi-tienda", "Integraciones", "Analytics"]
+  },
+  {
     name: "Aguamarina",
     description:
       "E-commerce de joyería premium con diseño elegante y experiencia de usuario optimizada para conversiones.",
