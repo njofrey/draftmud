@@ -70,7 +70,7 @@ export default function PortfolioSection() {
               return (
               <div key={index} className="space-y-6 pb-6 md:pb-0">
                 {hasSlideshow ? (
-                  project.name === "TEST" ? (
+                  project.name === "Nine9" ? (
                     <PortfolioSlideshowEmbla
                       images={images}
                       name={project.name}

@@ -19,7 +19,7 @@ export default function PortfolioSlideshowEmbla({
   name,
   industry,
   className,
-  heightClass = "h-[56vw] sm:h-[420px] md:h-[520px]",
+  heightClass,
 }: Props) {
   const autoplay = useRef(Autoplay({ 
     delay: 5500, 
@@ -77,8 +77,7 @@ export default function PortfolioSlideshowEmbla({
     <div
       className={cn(
         "group relative w-full overflow-hidden rounded-lg bg-black select-none touch-pan-y overscroll-contain",
-        heightClass, // aplica alto
-        className
+        className // aplica aspect ratio (mismo que Nine9)
       )}
     >
       {/* Viewport */}
