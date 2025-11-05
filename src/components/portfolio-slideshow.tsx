@@ -418,10 +418,12 @@ export default function PortfolioSlideshow({
                 src={img}
                 alt={`${name} - ${index + 1}`}
                 fill
-                sizes="100vw"
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
                 priority={isActive || isNext}
                 loading={(isActive || isNext) ? "eager" : "lazy"}
+                decoding="async"
+                quality={90}
                 draggable={false}
               />
             </div>

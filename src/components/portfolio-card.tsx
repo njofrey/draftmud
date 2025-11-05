@@ -22,6 +22,10 @@ export default function PortfolioCard({
               width="720"
               src={card.img}
               alt={card.name}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              quality={90}
+              loading="lazy"
+              decoding="async"
             />
             <div className="mt-4">
               <h3 className="text-title text-2xl font-medium ">

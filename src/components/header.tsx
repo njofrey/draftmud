@@ -16,8 +16,7 @@ export const HeroHeader = () => {
   const inactivityTimerRef = React.useRef<NodeJS.Timeout | null>(null);
 
   // Función para scroll suave
-  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
-    e.preventDefault();
+  const smoothScrollTo = (targetId: string) => {
     const element = document.getElementById(targetId);
     if (element) {
       element.scrollIntoView({
@@ -25,26 +24,30 @@ export const HeroHeader = () => {
         block: "start",
       });
     }
-    // Cerrar menú móvil si está abierto
-    if (menuState) {
-      setIsMenuClosing(true);
-      setMenuState(false);
-      setTimeout(() => {
-        setIsMenuClosing(false);
-      }, 350);
-    }
   };
 
   // Función para cerrar menú al hacer click en un link
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId?: string) => {
-    if (targetId) {
-      handleSmoothScroll(e, targetId);
-    } else {
+    if (!targetId) {
+      // Solo cerrar
+      setIsMenuClosing(true);
+      setMenuState(false);
+      setTimeout(() => setIsMenuClosing(false), 500);
+      return;
+    }
+
+    if (menuState) {
+      // Diferir scroll hasta que termine la animación de cierre
+      e.preventDefault();
       setIsMenuClosing(true);
       setMenuState(false);
       setTimeout(() => {
+        smoothScrollTo(targetId);
         setIsMenuClosing(false);
-      }, 350);
+      }, 520);
+    } else {
+      e.preventDefault();
+      smoothScrollTo(targetId);
     }
   };
 
@@ -54,7 +57,7 @@ export const HeroHeader = () => {
     setMenuState(false);
     setTimeout(() => {
       setIsMenuClosing(false);
-    }, 350);
+    }, 500);
   };
 
   // Función para cerrar menú con tecla Escape
@@ -64,7 +67,7 @@ export const HeroHeader = () => {
       setMenuState(false);
       setTimeout(() => {
         setIsMenuClosing(false);
-      }, 350);
+      }, 500);
     }
   };
 
@@ -86,6 +89,13 @@ export const HeroHeader = () => {
     resetInactivityTimer();
   }, [resetInactivityTimer]);
 
+  // Mantener el header visible durante el cierre
+  React.useEffect(() => {
+    if (!menuState && isMenuClosing) {
+      setIsVisible(true);
+    }
+  }, [menuState, isMenuClosing]);
+
   // Manejar scroll y cambio de estilo
   React.useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -100,16 +110,10 @@ export const HeroHeader = () => {
           // Cambio de estilo al scroll
           setIsScrolled(currentScrollY > 50);
           
-          // No ocultar si el menú está abierto
-          if (menuState) {
+          // Sal rápido si el menú abre o cierra
+          if (menuState || isMenuClosing) {
             setIsVisible(true);
             lastScrollY.current = currentScrollY;
-            ticking = false;
-            return;
-          }
-          
-          // No cambiar visibilidad si el menú acaba de cerrarse
-          if (isMenuClosing) {
             ticking = false;
             return;
           }
@@ -186,6 +190,8 @@ export const HeroHeader = () => {
       }
     };
   }, [menuState, handleUserActivity, resetInactivityTimer]);
+  const navOnTop = menuState || isMenuClosing || isScrolled;
+
   return (
     <header>
       
@@ -195,11 +201,11 @@ export const HeroHeader = () => {
           transform: isVisible || menuState ? 'translateY(0)' : 'translateY(-100%)',
           opacity: isVisible || menuState ? 1 : 0,
           pointerEvents: isVisible || menuState ? 'auto' : 'none',
-          transition: isMenuClosing ? 'none' : 'transform 0.3s ease-in-out, opacity 0.3s ease-in-out',
+          transition: 'transform 0.3s ease-in-out, opacity 0.3s ease-in-out',
         }}
         className={cn(
           "fixed w-full px-2",
-          menuState ? "z-[60]" : "z-20"
+          navOnTop ? "z-[60]" : "z-20"
         )}
       >
         <div
@@ -227,7 +233,7 @@ export const HeroHeader = () => {
                     setIsMenuClosing(true);
                     setTimeout(() => {
                       setIsMenuClosing(false);
-                    }, 350);
+                    }, 500);
                   }
                   setMenuState(!menuState);
                 }}
@@ -264,7 +270,10 @@ export const HeroHeader = () => {
                       {isHashLink ? (
                         <Link
                           href={item.href}
-                          onClick={(e) => handleSmoothScroll(e, targetId!)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            smoothScrollTo(targetId!);
+                          }}
                           className="hover:text-accent-foreground block duration-150"
                         >
                           <span>{item.name}</span>
@@ -289,7 +298,10 @@ export const HeroHeader = () => {
                 size="lg"
                 className="transition-transform duration-200 ease-in-out hover:-translate-y-1"
               >
-                <Link href="#contact" onClick={(e) => handleSmoothScroll(e, "contact")}>
+                <Link href="#contact" onClick={(e) => {
+                  e.preventDefault();
+                  smoothScrollTo("contact");
+                }}>
                   <span>Contacto</span>
                 </Link>
               </Button>

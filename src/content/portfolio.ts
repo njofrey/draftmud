@@ -15,7 +15,7 @@ export const PORTFOLIO_CONTENT = [
     description:
       "Marketplace multi-marca con arquitectura escalable y sistema de gestión unificado para múltiples tiendas.",
     img: "/images/portfolio/web-nine.jpg",
-    images: ["/images/Nine9/1.jpeg", "/images/Nine9/2.jpeg", "/images/Nine9/3.jpeg"], // Slideshow de 3 imágenes
+    images: ["/images/Nine9/Nine1.jpeg", "/images/Nine9/Nine2.jpeg", "/images/Nine9/Nine3.jpeg"], // Slideshow de 3 imágenes
     url: "#",
     result: "+300% escalabilidad",
     industry: "Diseño Web",
@@ -26,6 +26,7 @@ export const PORTFOLIO_CONTENT = [
     description:
       "E-commerce de joyería premium con diseño elegante y experiencia de usuario optimizada para conversiones.",
     img: "/images/portfolio/web-aguamarina.jpg",
+    images: ["/images/Aguamarina/aguamarina1.jpg", "/images/Aguamarina/aguamarina2.jpg", "/images/Aguamarina/aguamarina3.jpg"], // Slideshow de 3 imágenes
     url: "#",
     result: "+150% conversiones",
     industry: "Joyería",

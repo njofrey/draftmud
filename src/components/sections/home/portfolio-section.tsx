@@ -70,7 +70,7 @@ export default function PortfolioSection() {
               return (
               <div key={index} className="space-y-6 pb-6 md:pb-0">
                 {hasSlideshow ? (
-                  project.name === "Nine9" || project.name === "Mudi Matcha" ? (
+                  project.name === "Nine9" || project.name === "Mudi Matcha" || project.name === "Aguamarina" ? (
                     <PortfolioSlideshowEmbla
                       images={images}
                       name={project.name}
@@ -91,7 +91,10 @@ export default function PortfolioSection() {
                       src={project.img}
                       alt={project.name}
                       fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className="object-cover"
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                     <div className="absolute bottom-4 left-4">

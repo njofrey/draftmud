@@ -81,23 +81,24 @@ export default function PortfolioSlideshowEmbla({
       )}
     >
       {/* Viewport */}
-      <div ref={emblaRef} className="overflow-hidden h-full">
+      <div ref={emblaRef} className="overflow-hidden absolute inset-0">
         {/* Container */}
         <div className="flex will-change-transform h-full">
           {images.map((src, i) => {
             const isActive = i === selected;
             const isNext = i === ((selected + 1) % images.length);
             return (
-              <div key={i} className="relative min-w-full h-full">
+              <div key={i} className="relative flex-shrink-0 w-full h-full">
                 <Image
                   src={src}
                   alt={`${name} - ${i + 1}`}
                   fill
-                  sizes="100vw"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover [backface-visibility:hidden] [transform:translateZ(0)]"
                   priority={isActive || isNext}
                   loading={isActive || isNext ? "eager" : "lazy"}
                   decoding="async"
+                  quality={90}
                   draggable={false}
                 />
               </div>
