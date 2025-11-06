@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -7,9 +6,6 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-mono: var(--font-ibm-plex-mono);
-  --font-faktum: 'Faktum', sans-serif;
-  --font-migra: 'Migra', serif;
-  --font-supply-mono: 'Supply Mono', monospace;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -114,44 +110,6 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-@font-face {
-  font-family: 'Faktum';
-  src: url('/Fonts/Faktum-Font/Faktum-Regular.woff2') format('woff2'),
-       url('/Fonts/Faktum-Font/Faktum-Regular.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Faktum';
-  src: url('/Fonts/Faktum-Font/Faktum-Bold.woff2') format('woff2'),
-       url('/Fonts/Faktum-Font/Faktum-Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* PP Migra ExtraLight for headers */
-@font-face {
-  font-family: 'Migra';
-  src: url('/Fonts/Migra/Migra-Extralight.woff2') format('woff2'),
-       url('/Fonts/Migra/Migra-Extralight.woff') format('woff'),
-       url('/Fonts/Migra/Migra-Extralight.otf') format('opentype');
-  font-weight: 100;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Supply Mono para badges/números */
-@font-face {
-  font-family: 'Supply Mono';
-  src: url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -167,15 +125,15 @@
   
   /* Migra ExtraLight helper for headings */
   .migra-xl {
-    font-family: 'Migra', serif;
-    font-weight: 100;
+    font-family: var(--font-migra), serif;
+    font-weight: 200;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   
   /* Migra para headers */
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Migra', serif;
+    font-family: var(--font-migra), serif;
     font-weight: 200;
   }
   
@@ -197,7 +155,7 @@
     gap: 6px;
     font-size: 18px;
     line-height: 1.2;
-    font-family: 'Faktum', sans-serif;
+    font-family: var(--font-faktum), sans-serif;
     font-weight: 400;
     color: hsl(var(--foreground));
     margin-bottom: 8px;

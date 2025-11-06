@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import type { MouseEvent } from "react";
+
 import { Button } from "@/components/ui/button";
 
 import { AnimatedGroup } from "@/components/motion-primitives/animated-group";
@@ -24,7 +24,7 @@ const transitionVariants = {
 };
 
 export default function HeroSection() {
-  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+  const handleSmoothScroll = (e: MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
     const element = document.getElementById(targetId);
     if (element) {
@@ -38,7 +38,7 @@ export default function HeroSection() {
   return (
     <>
       <div className="overflow-hidden">
-        <section className="pt-44 pb-12 lg:pt-64 lg:pb-20">
+        <section id="hero" data-section="hero" className="pt-44 pb-12 lg:pt-64 lg:pb-20">
           <div className="mx-auto max-w-[90rem] px-0 lg:px-8 xl:px-12">
             <div className="grid items-center gap-6 lg:gap-12 xl:gap-20 lg:grid-cols-[55%_45%] lg:items-start">
               <div className="lg:col-span-1">
@@ -91,7 +91,12 @@ export default function HeroSection() {
                     variant="ghost"
                     className="rounded-md px-4 py-2.5 text-[15px] lg:px-5 lg:py-3 lg:text-base cursor-pointer transition-transform duration-200 ease-in-out hover:-translate-y-1"
                   >
-                    <Link href="#portfolio" onClick={(e) => handleSmoothScroll(e, "portfolio")}>
+                    <Link
+                      href="#portfolio"
+                      data-cta-id="hero_view_work"
+                      data-cta-loc="hero"
+                      onClick={(e) => handleSmoothScroll(e, "portfolio")}
+                    >
                       <span className="text-nowrap">Ver trabajo</span>
                     </Link>
                   </Button>
@@ -101,7 +106,12 @@ export default function HeroSection() {
                     size="lg"
                     className="rounded-md px-4 py-2.5 text-[15px] lg:px-5 lg:py-3 lg:text-base cursor-pointer transition-transform duration-200 ease-in-out hover:-translate-y-1"
                   >
-                    <Link href="#contact" onClick={(e) => handleSmoothScroll(e, "contact")}>
+                    <Link
+                      href="#contact"
+                      data-cta-id="hero_start"
+                      data-cta-loc="hero"
+                      onClick={(e) => handleSmoothScroll(e, "contact")}
+                    >
                       <span className="text-nowrap">Empecemos</span>
                     </Link>
                   </Button>

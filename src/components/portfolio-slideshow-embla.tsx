@@ -11,7 +11,6 @@ interface Props {
   name: string;
   industry: string;
   className?: string;
-  heightClass?: string; // opcional para ajustar altura desde fuera
 }
 
 export default function PortfolioSlideshowEmbla({
@@ -19,7 +18,6 @@ export default function PortfolioSlideshowEmbla({
   name,
   industry,
   className,
-  heightClass,
 }: Props) {
   const autoplay = useRef(Autoplay({ 
     delay: 5500, 
@@ -55,7 +53,6 @@ export default function PortfolioSlideshowEmbla({
   useEffect(() => {
     if (!emblaApi || !autoplay.current) return;
     const stop  = () => autoplay.current.stop();
-    const play  = () => autoplay.current.play();
     const reset = () => autoplay.current.reset(); // reinicia el temporizador de forma segura
     const handleReInit = () => autoplay.current?.play(); // si Embla se re-inicializa, garantiza autoplay
     emblaApi.on("pointerDown", stop);   // mientras arrastras, pausa
@@ -75,6 +72,8 @@ export default function PortfolioSlideshowEmbla({
 
   return (
     <div
+      data-carousel="portfolio_embla"
+      data-slides={images.length}
       className={cn(
         "group relative w-full overflow-hidden rounded-lg bg-black select-none touch-pan-y overscroll-contain",
         className // aplica aspect ratio (mismo que Nine9)
@@ -88,7 +87,7 @@ export default function PortfolioSlideshowEmbla({
             const isActive = i === selected;
             const isNext = i === ((selected + 1) % images.length);
             return (
-              <div key={i} className="relative flex-shrink-0 w-full h-full">
+              <div key={i} data-slide-index={i + 1} data-slide-id={`portfolio_embla_${i + 1}`} className="relative flex-shrink-0 w-full h-full">
                 <Image
                   src={src}
                   alt={`${name} - ${i + 1}`}

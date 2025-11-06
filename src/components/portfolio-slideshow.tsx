@@ -23,7 +23,7 @@ export default function PortfolioSlideshow({
   const [isSnapping, setIsSnapping] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transitionStart, setTransitionStart] = useState(false);
-  const [startX, setStartX] = useState(0);
+  const [, setStartX] = useState(0);
   const [currentX, setCurrentX] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const autoAdvanceTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -46,7 +46,7 @@ export default function PortfolioSlideshow({
   // Batching con requestAnimationFrame para currentX
   const scheduleSetCurrentX = useCallback((x: number) => {
     currentXAnimRef.current = x;
-    if (rafIdRef.current != null) return;
+    if (rafIdRef.current !== null) return;
     rafIdRef.current = requestAnimationFrame(() => {
       setCurrentX(currentXAnimRef.current);
       rafIdRef.current = null;
@@ -86,7 +86,7 @@ export default function PortfolioSlideshow({
   // Limpia el rAF al desmontar
   useEffect(() => {
     return () => {
-      if (rafIdRef.current != null) cancelAnimationFrame(rafIdRef.current);
+      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
     };
   }, []);
 
@@ -192,7 +192,7 @@ export default function PortfolioSlideshow({
 
   // Función compartida para limpiar drag
   const endDrag = useCallback(() => {
-    if (rafIdRef.current != null) {
+    if (rafIdRef.current !== null) {
       cancelAnimationFrame(rafIdRef.current);
       rafIdRef.current = null;
     }
@@ -218,12 +218,12 @@ export default function PortfolioSlideshow({
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
-    if (pointerIdRef.current == null) return;
+    if (pointerIdRef.current === null) return;
     
     const deltaX = e.clientX - startXRef.current;
     const deltaY = e.clientY - startYRef.current;
     
-    if (dragLockedRef.current == null) {
+    if (dragLockedRef.current === null) {
       if (Math.abs(deltaX) > 6 || Math.abs(deltaY) > 6) {
         dragLockedRef.current = Math.abs(deltaX) > Math.abs(deltaY) ? "x" : "y";
       }
@@ -259,7 +259,7 @@ export default function PortfolioSlideshow({
     const fast = Math.abs(velocityRef.current) > 0.6; // 0.6 px/ms ≈ swipe decidido
     const shouldSwipe = fast || dragPercent > 0.3 || Math.abs(currentX) > SWIPE_THRESHOLD;
     
-    if (rafIdRef.current != null) {
+    if (rafIdRef.current !== null) {
       cancelAnimationFrame(rafIdRef.current);
       rafIdRef.current = null;
     }
@@ -322,6 +322,8 @@ export default function PortfolioSlideshow({
   return (
     <div
       ref={containerRef}
+      data-carousel="portfolio_slideshow"
+      data-slides={images.length}
       className={cn(
         "group relative w-full overflow-hidden rounded-lg bg-black select-none",
         "touch-pan-y overscroll-contain",
@@ -394,6 +396,8 @@ export default function PortfolioSlideshow({
           return (
             <div
               key={index}
+              data-slide-index={index + 1}
+              data-slide-id={`portfolio_slideshow_${index + 1}`}
               className="absolute inset-0 will-change-transform"
               style={{
                 transform: `translate3d(${position}%, 0, 0)`,

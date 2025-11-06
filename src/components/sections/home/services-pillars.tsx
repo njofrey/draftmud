@@ -112,7 +112,7 @@ export default function ServicesPillars() {
   };
 
   return (
-    <section id="services" className="pt-12 pb-8 md:pt-20 md:pb-12">
+    <section id="services" data-section="services" className="pt-12 pb-8 md:pt-20 md:pb-12">
       <div className="mx-auto max-w-6xl safe-container">
         <div className="mb-16">
           <h2 className="text-xl leading-tight mb-6" style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}>

@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/gracias/", "/full-version/"],
     },
-    sitemap: "https://estudiomud.com/sitemap.xml",
+    sitemap: "https://estudiomud.cl/sitemap.xml",
   };
 }
 

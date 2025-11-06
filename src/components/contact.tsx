@@ -1,14 +1,81 @@
 "use client";
-import { Mail, MapPin, ArrowRight } from "lucide-react";
+import { useRef, useState } from "react";
+import { ArrowRight } from "lucide-react";
+
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import Link from "next/link";
-import { useState } from "react";
+import { trackEvent } from "@/lib/analytics";
+import { captureUtm, getUtm } from "@/lib/utm";
 
-export default function FeaturesSection() {
+export default function ContactSection() {
   const [serviceValue, setServiceValue] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const isSubmittingRef = useRef(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (isSubmittingRef.current) {
+      return;
+    }
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const honeypotValue = formData.get("company");
+
+    if (typeof honeypotValue === "string" && honeypotValue.trim().length > 0) {
+      return;
+    }
+
+    isSubmittingRef.current = true;
+    setIsSubmitting(true);
+
+    const params = new URLSearchParams();
+    const name = formData.get("name");
+    params.set("success", "true");
+    if (typeof name === "string" && name.trim().length > 0) {
+      params.set("name", name.trim());
+    }
+
+    const nextUrl = new URL(`${window.location.origin}/gracias`);
+    params.forEach((value, key) => nextUrl.searchParams.set(key, value));
+
+    const hiddenInput = form.querySelector('input[name="_next"]') as HTMLInputElement | null;
+    if (hiddenInput) {
+      hiddenInput.value = nextUrl.toString();
+    }
+
+    captureUtm();
+    const utmData = getUtm();
+
+    trackEvent("form_submit", { form_id: "contacto" });
+    trackEvent("generate_lead", { form_id: "contacto", ...utmData });
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: formData,
+        mode: "cors",
+        keepalive: true,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`Form submit failed with status ${response.status}`);
+      }
+    } catch (error) {
+      console.error("[contact] form submission fallback", error);
+      isSubmittingRef.current = false;
+      setIsSubmitting(false);
+      form.submit();
+      return;
+    }
+
+    window.location.href = nextUrl.toString();
+  };
   return (
-    <section id="contact" className="pt-16 pb-20 md:pt-32 md:pb-32 overflow-x-hidden">
+    <section id="contact" data-section="contact" className="pt-16 pb-20 md:pt-32 md:pb-32 overflow-x-hidden">
       {/* Separador punteado al inicio */}
       <div className="my-0 h-px mb-8 md:mb-12" style={{
         width: '100vw',
@@ -28,7 +95,7 @@ export default function FeaturesSection() {
             <p className="text-sm text-muted-foreground mb-8 leading-relaxed">
               Queremos conocer tu marca y entender lo que estás buscando. Completa el formulario y te responderemos en menos de 24 horas hábiles.<br />
               <br />
-              También puedes escribirnos directamente a <a href="mailto:contacto@estudiomud.com" className="text-foreground hover:opacity-70 transition-opacity underline-offset-2 hover:underline">contacto@estudiomud.com</a>
+              También puedes escribirnos directamente a <a href="mailto:contacto@estudiomud.com" data-track="contact" className="text-foreground hover:opacity-70 transition-opacity underline-offset-2 hover:underline">contacto@estudiomud.com</a>
             </p>
           </div>
 
@@ -37,24 +104,18 @@ export default function FeaturesSection() {
             <form
               action="https://formspree.io/f/mjkepqyo"
               method="POST"
+              data-form-id="contacto"
               className="space-y-6 w-full"
-              onSubmit={(e) => {
-                const formData = new FormData(e.currentTarget);
-                const name = formData.get('name');
-                const params = new URLSearchParams();
-                params.set('success', 'true');
-                if (name) {
-                  params.set('name', name.toString());
-                }
-                const nextUrl = `${window.location.origin}/gracias?${params.toString()}`;
-                const hiddenInput = e.currentTarget.querySelector('input[name="_next"]') as HTMLInputElement;
-
-                if (hiddenInput) {
-                  hiddenInput.value = nextUrl;
-                }
-              }}
+              onSubmit={handleSubmit}
             >
               <input type="hidden" name="_next" value={`${typeof window !== 'undefined' ? window.location.origin : ''}/gracias`} />
+              <input
+                type="text"
+                name="company"
+                tabIndex={-1}
+                autoComplete="off"
+                style={{ display: "none" }}
+              />
 
               {/* Nombre */}
               <div className="relative">
@@ -210,6 +271,8 @@ export default function FeaturesSection() {
                   backgroundRepeat: 'repeat-x',
                   paddingBottom: '12px'
                 }}
+                disabled={isSubmitting}
+                aria-disabled={isSubmitting}
               >
                 Enviar
                 <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-1" />

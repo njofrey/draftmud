@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function FooterSection() {
   return (
-    <footer className="py-8 md:py-12">
+    <footer id="footer" data-section="footer" className="py-8 md:py-12">
       <div className="mx-auto max-w-5xl px-6">
         <Link
           href="/"
@@ -20,6 +20,7 @@ export default function FooterSection() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
+              data-track="outbound"
               className="text-muted-foreground hover:text-primary block"
             >
               <svg

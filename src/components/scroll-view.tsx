@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { UseInViewOptions, motion } from "motion/react";
 import { InView } from "./motion-primitives/in-view";
 

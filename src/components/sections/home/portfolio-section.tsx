@@ -11,6 +11,7 @@ export default function PortfolioSection() {
     <section
     className="pt-0 pb-8 md:pb-12"
       id="portfolio"
+      data-section="portfolio"
     >
       <div className="mx-auto max-w-6xl space-y-8 safe-container">
         <div className="mt-6 mb-8 h-px" style={{
@@ -70,7 +71,7 @@ export default function PortfolioSection() {
               return (
               <div key={index} className="space-y-6 pb-6 md:pb-0">
                 {hasSlideshow ? (
-                  project.name === "Nine9" || project.name === "Mudi Matcha" || project.name === "Aguamarina" ? (
+                  project.name === "Nine9" || project.name === "Mudi Matcha" || project.name === "Aguamarina" || project.name === "BeeClean" ? (
                     <PortfolioSlideshowEmbla
                       images={images}
                       name={project.name}
@@ -115,7 +116,6 @@ export default function PortfolioSection() {
                     <span
                       key={serviceIndex}
                       className="px-2.5 py-0.5 bg-muted text-muted-foreground text-xs rounded-full border border-border/20 font-mono"
-                      style={{ fontFamily: 'Supply Mono, monospace' }}
                     >
                       {service}
                     </span>
@@ -125,6 +125,11 @@ export default function PortfolioSection() {
                 <div className="pt-2 pb-4 md:pb-0">
                   <Link
                     href={project.url}
+                    data-cta-id={project.name === "Mudi Matcha" ? "visit_site_mudi" : project.name === "Nine9" ? "visit_site_nine9" : project.name === "Aguamarina" ? "visit_site_aguamarina" : "visit_site_beeclean"}
+                    data-cta-loc="portfolio"
+                    data-track="outbound"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="group inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
                   >
                     <span>Visitar sitio</span>

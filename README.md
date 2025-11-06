@@ -1,93 +1,55 @@
-# Estudio Mud - Sitio Web
+# Estudio Mud – Internal Web
 
-Sitio web profesional para Estudio Mud, especialistas en diseño de ecommerce y desarrollo de sitios web premium en Chile.
+Sitio institucional de Estudio Mud (ecommerce y sitios premium en Chile). Este repositorio es de uso interno del equipo; la información pública del sitio vive en el CMS.
 
-## 🚀 Características
+## Requisitos
 
-- **Diseño Responsivo**: Optimizado para todos los dispositivos
-- **Animaciones Suaves**: Efectos visuales profesionales con Framer Motion
-- **Formulario de Contacto**: Integrado con Formspree para manejo de leads
-- **SEO Optimizado**: Estructura semántica y meta tags optimizados
-- **Performance**: Carga rápida y optimizada
+- Node.js `>=20.11.0 <21`
+- pnpm `>=9`
+  ```bash
+  corepack enable
+  corepack prepare pnpm@latest --activate
+  ```
 
-## 🛠️ Tecnologías
+## Uso diario
 
-- [Next.js 14](https://nextjs.org/) - Framework React
-- [TypeScript](https://www.typescriptlang.org/) - Tipado estático
-- [Tailwind CSS](https://tailwindcss.com/) - Estilos utilitarios
-- [Framer Motion](https://motion.dev/) - Animaciones
-- [Formspree](https://formspree.io/) - Manejo de formularios
-- [Lucide React](https://lucide.dev/) - Iconos
-
-## 📦 Instalación
-
-1. **Clonar el repositorio:**
-   ```bash
-   git clone https://github.com/njofrey/mud.git
-   cd mud
-   ```
-
-2. **Instalar dependencias:**
-   ```bash
-   pnpm install
-   ```
-
-3. **Ejecutar en desarrollo:**
-   ```bash
-   pnpm dev
-   ```
-
-   Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
-
-## 🏗️ Estructura del Proyecto
-
-```
-src/
-├── app/                    # App Router de Next.js
-│   ├── layout.tsx         # Layout principal
-│   ├── page.tsx           # Página de inicio
-│   └── gracias/           # Página de agradecimiento
-├── components/            # Componentes reutilizables
-│   ├── sections/         # Secciones de la página
-│   ├── ui/               # Componentes de UI base
-│   └── motion-primitives/ # Componentes de animación
-├── content/              # Datos y contenido
-└── lib/                  # Utilidades
+### Desarrollo
+```bash
+pnpm install
+pnpm dev        # http://localhost:3000 con hot reload
 ```
 
-## 🎨 Secciones
+### Producción local
+```bash
+pnpm build
+pnpm start      # Previene sorpresas antes del deploy
+```
 
-- **Hero**: Presentación principal con CTAs
-- **Credibility Bar**: Métricas de credibilidad
-- **Portfolio**: Proyectos destacados
-- **Testimonios**: Reseñas de clientes
-- **Servicios**: Nuestros servicios
-- **Contacto**: Formulario de contacto
+## Variables de entorno
 
-## 📧 Contacto
+`.env.example` lista las variables necesarias (GA4, Meta Pixel, Formspree). Completa los valores reales en tu `.env.local` y no los compartas fuera del equipo.
 
-- **Email**: contacto@estudiomud.com
-- **Ubicación**: Vitacura, Santiago, Chile
+Para cambios futuros, documentar aquí cualquier variable adicional sin exponer IDs ni secretos.
 
-## 🚀 Deployment
+## Puntos clave del proyecto
 
-### Vercel (Recomendado)
+- Next.js 15 (App Router) + React 19 + TypeScript.
+- Tailwind + motion primitives personalizados para animaciones.
+- Formulario de contacto integrado con Formspree (honeypot, UTM tracking y eventos GA/Facebook).
+- Instrumentación analytics (GA4 + Meta Pixel) encapsulada en `src/app/_components` y utilidades en `src/lib`.
+- Fuentes locales (Faktum/Migra) declaradas en `src/app/fonts.ts`.
 
-1. Conecta tu repositorio a Vercel
-2. Configura las variables de entorno si es necesario
-3. Deploy automático en cada push
+## Workflow sugerido
 
-### Otras plataformas
+1. Trabajar en ramas feature/bugfix y abrir PR interna.
+2. Ejecutar `pnpm build` antes de merge para verificar lint + types (usar Node 20.x LTS).
+3. Deploy en Vercel (proyecto `estudiomud-cl`) o infraestructura que defina el equipo.
 
-El proyecto es compatible con cualquier plataforma que soporte Next.js:
-- Netlify
-- Cloudflare Pages
-- AWS Amplify
+## Contacto
 
-## 📄 Licencia
-
-MIT License
+- Email interno: contacto@estudiomud.com
+- Oficina: Vitacura, Santiago (Chile)
 
 ---
 
-Desarrollado con ❤️ por Estudio Mud
+Repositorio mantenido por Estudio Mud. Consultas sobre infraestructura o acceso: canal `#tech-web` del Slack interno.

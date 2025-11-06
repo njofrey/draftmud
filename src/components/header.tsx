@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { Logo } from "./logo";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React from "react";
@@ -237,7 +236,7 @@ export const HeroHeader = () => {
                   }
                   setMenuState(!menuState);
                 }}
-                aria-label={menuState == true ? "Close Menu" : "Open Menu"}
+                aria-label={menuState === true ? "Close Menu" : "Open Menu"}
                 aria-expanded={menuState}
                 aria-controls="mobile-menu"
                 className="relative z-20 -m-2.5 -mr-4 block cursor-pointer p-2.5 lg:hidden transition-all duration-300 ease-in-out"
@@ -298,7 +297,7 @@ export const HeroHeader = () => {
                 size="lg"
                 className="transition-transform duration-200 ease-in-out hover:-translate-y-1"
               >
-                <Link href="#contact" onClick={(e) => {
+                <Link href="#contact" data-cta-id="header_contact" data-cta-loc="header" onClick={(e) => {
                   e.preventDefault();
                   smoothScrollTo("contact");
                 }}>
@@ -347,6 +346,8 @@ export const HeroHeader = () => {
             <li>
               <Link
                 href="#contact"
+                data-cta-id="header_contact"
+                data-cta-loc="header"
                 onClick={(e) => handleLinkClick(e, "contact")}
                 className="migra-xl text-4xl md:text-5xl leading-tight text-foreground hover:opacity-70 transition-opacity duration-200 block"
               >

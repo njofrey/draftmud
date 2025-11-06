@@ -37,7 +37,7 @@ function GraciasContent() {
           {/* Back Button */}
           <div className="pt-8">
             <Button asChild size="lg" className="text-lg px-8 py-6">
-              <Link href="/">
+              <Link href="/" data-cta-id="thanks_back_home" data-cta-loc="thanks">
                 <ArrowLeft className="mr-2 size-5" />
                 Volver al inicio
               </Link>
